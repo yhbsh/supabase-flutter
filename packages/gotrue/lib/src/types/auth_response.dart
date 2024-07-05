@@ -87,8 +87,7 @@ class GenerateLinkProperties {
         emailOtp = json['email_otp'] ?? '',
         hashedToken = json['hashed_token'] ?? '',
         redirectTo = json['redirect_to'] ?? '',
-        verificationType =
-            GenerateLinkTypeExtended.fromString(json['verification_type']);
+        verificationType = GenerateLinkTypeExtended.fromString(json['verification_type']);
 }
 
 extension ToSnakeCase on Enum {

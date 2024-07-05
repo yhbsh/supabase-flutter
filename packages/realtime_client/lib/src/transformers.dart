@@ -135,8 +135,7 @@ dynamic convertCell(String type, dynamic value) {
     return toArray(value, dataType);
   }
 
-  final typeEnum = PostgresTypes.values
-      .firstWhereOrNull((e) => e.toString() == 'PostgresTypes.$type');
+  final typeEnum = PostgresTypes.values.firstWhereOrNull((e) => e.toString() == 'PostgresTypes.$type');
   // If not null, convert to correct type.
   switch (typeEnum) {
     case PostgresTypes.bool:
@@ -166,8 +165,7 @@ dynamic convertCell(String type, dynamic value) {
     case PostgresTypes.reltime: // To allow users to cast it based on Timezone
     case PostgresTypes.text:
     case PostgresTypes.time: // To allow users to cast it based on Timezone
-    case PostgresTypes
-          .timestamptz: // To allow users to cast it based on Timezone
+    case PostgresTypes.timestamptz: // To allow users to cast it based on Timezone
     case PostgresTypes.timetz: // To allow users to cast it based on Timezone
     case PostgresTypes.tsrange:
     case PostgresTypes.tstzrange:
@@ -309,8 +307,7 @@ Map<String, dynamic> getEnrichedPayload(Map<String, dynamic> payload) {
   };
 }
 
-Map<String, Map<String, dynamic>> getPayloadRecords(
-    Map<String, dynamic> payload) {
+Map<String, Map<String, dynamic>> getPayloadRecords(Map<String, dynamic> payload) {
   final records = <String, Map<String, dynamic>>{
     'new': {},
     'old': {},

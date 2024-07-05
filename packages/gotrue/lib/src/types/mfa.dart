@@ -132,8 +132,7 @@ class AuthMFAAdminListFactorsResponse {
 
   factory AuthMFAAdminListFactorsResponse.fromJson(Map<String, dynamic> json) {
     return AuthMFAAdminListFactorsResponse(
-      factors:
-          (json['factors'] as List).map((e) => Factor.fromJson(e)).toList(),
+      factors: (json['factors'] as List).map((e) => Factor.fromJson(e)).toList(),
     );
   }
 }
@@ -208,23 +207,12 @@ class Factor {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Factor &&
-        other.id == id &&
-        other.friendlyName == friendlyName &&
-        other.factorType == factorType &&
-        other.status == status &&
-        other.createdAt == createdAt &&
-        other.updatedAt == updatedAt;
+    return other is Factor && other.id == id && other.friendlyName == friendlyName && other.factorType == factorType && other.status == status && other.createdAt == createdAt && other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        friendlyName.hashCode ^
-        factorType.hashCode ^
-        status.hashCode ^
-        createdAt.hashCode ^
-        updatedAt.hashCode;
+    return id.hashCode ^ friendlyName.hashCode ^ factorType.hashCode ^ status.hashCode ^ createdAt.hashCode ^ updatedAt.hashCode;
   }
 }
 

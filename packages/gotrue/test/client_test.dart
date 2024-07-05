@@ -26,9 +26,7 @@ void main() {
     late GoTrueClient clientWithAuthConfirmOff;
 
     setUp(() async {
-      final res = await http.post(
-          Uri.parse('http://localhost:3000/rpc/reset_and_init_auth_data'),
-          headers: {'x-forwarded-for': '127.0.0.1'});
+      final res = await http.post(Uri.parse('http://localhost:3000/rpc/reset_and_init_auth_data'), headers: {'x-forwarded-for': '127.0.0.1'});
       if (res.body.isNotEmpty) throw res.body;
 
       newEmail = getNewEmail();
@@ -102,8 +100,7 @@ void main() {
       expect(data?.user.id, isA<String>());
       expect(data?.user.userMetadata!['Hello'], 'World');
     });
-    test('signUp() with week password throws AuthWeakPasswordException',
-        () async {
+    test('signUp() with week password throws AuthWeakPasswordException', () async {
       try {
         await client.signUp(email: newEmail, password: '123');
         fail('signUp with week password should throw exception');
@@ -118,8 +115,7 @@ void main() {
       const tokenType = 'my_token_type';
       const providerToken = 'my_provider_token_with_fragment';
 
-      final urlWithoutAccessToken = Uri.parse(
-          'http://my-callback-url.com/welcome#expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken');
+      final urlWithoutAccessToken = Uri.parse('http://my-callback-url.com/welcome#expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken');
       try {
         await client.getSessionFromUrl(urlWithoutAccessToken);
         fail('getSessionFromUrl did not throw exception');
@@ -127,19 +123,16 @@ void main() {
     });
 
     test('Parsing an error URL should throw', () async {
-      const errorMessage =
-          'Unverified email with spotify. A confirmation email has been sent to your spotify email';
+      const errorMessage = 'Unverified email with spotify. A confirmation email has been sent to your spotify email';
 
-      final urlWithoutAccessToken = Uri.parse(
-          'http://my-callback-url.com/#error=unauthorized_client&error_code=401&error_description=${Uri.encodeComponent(errorMessage)}');
+      final urlWithoutAccessToken = Uri.parse('http://my-callback-url.com/#error=unauthorized_client&error_code=401&error_description=${Uri.encodeComponent(errorMessage)}');
       try {
         await client.getSessionFromUrl(urlWithoutAccessToken);
         fail('getSessionFromUrl did not throw exception');
       } on AuthException catch (error) {
         expect(error.message, errorMessage);
       } catch (error) {
-        fail(
-            'getSessionFromUrl threw ${error.runtimeType} instead of AuthException');
+        fail('getSessionFromUrl threw ${error.runtimeType} instead of AuthException');
       }
     });
 
@@ -149,10 +142,8 @@ void main() {
       expect(
         stream,
         emitsInOrder([
-          predicate<AuthState>(
-              (event) => event.event == AuthChangeEvent.signedIn),
-          predicate<AuthState>(
-              (event) => event.event == AuthChangeEvent.signedOut),
+          predicate<AuthState>((event) => event.event == AuthChangeEvent.signedIn),
+          predicate<AuthState>((event) => event.event == AuthChangeEvent.signedOut),
         ]),
       );
 
@@ -185,9 +176,7 @@ void main() {
       expect(res.user!.email, 'fake1@email.com');
     });
 
-    test(
-        'signUp() with autoConfirm off with phone should fail because Twilio is not setup',
-        () async {
+    test('signUp() with autoConfirm off with phone should fail because Twilio is not setup', () async {
       try {
         await clientWithAuthConfirmOff.signUp(
           phone: phone1,
@@ -221,8 +210,7 @@ void main() {
     });
 
     test('signInWithPassword() with email', () async {
-      final response =
-          await client.signInWithPassword(email: email1, password: password);
+      final response = await client.signInWithPassword(email: email1, password: password);
       final data = response.session;
 
       expect(data?.accessToken, isA<String>());
@@ -243,8 +231,7 @@ void main() {
     });
 
     test('signInWithPassword() with   phone', () async {
-      final response =
-          await client.signInWithPassword(phone: phone1, password: password);
+      final response = await client.signInWithPassword(phone: phone1, password: password);
       final data = response.session;
 
       expect(data?.accessToken, isA<String>());
@@ -330,40 +317,31 @@ void main() {
 
     group('The auth client can signin with third-party oAuth providers', () {
       test('signIn() with Provider', () async {
-        final res =
-            await client.getOAuthSignInUrl(provider: OAuthProvider.google);
+        final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google);
         expect(res.url, isA<String>());
         expect(res.provider, OAuthProvider.google);
       });
 
       test('signIn() with Provider with redirectTo', () async {
-        final res = await client.getOAuthSignInUrl(
-            provider: OAuthProvider.google, redirectTo: 'https://supabase.com');
-        expect(res.url,
-            '$gotrueUrl/authorize?provider=google&redirect_to=https%3A%2F%2Fsupabase.com');
+        final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google, redirectTo: 'https://supabase.com');
+        expect(res.url, '$gotrueUrl/authorize?provider=google&redirect_to=https%3A%2F%2Fsupabase.com');
         expect(res.provider, OAuthProvider.google);
       });
 
       test('signIn() with Provider can append a redirectUrl', () async {
-        final res = await client.getOAuthSignInUrl(
-            provider: OAuthProvider.google,
-            redirectTo: 'https://localhost:9000/welcome');
+        final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google, redirectTo: 'https://localhost:9000/welcome');
         expect(res.url, isA<String>());
         expect(res.provider, OAuthProvider.google);
       });
 
       test('signIn() with Provider can append scopes', () async {
-        final res = await client.getOAuthSignInUrl(
-            provider: OAuthProvider.google, scopes: 'repo');
+        final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google, scopes: 'repo');
         expect(res.url, isA<String>());
         expect(res.provider, OAuthProvider.google);
       });
 
       test('signIn() with Provider can append options', () async {
-        final res = await client.getOAuthSignInUrl(
-            provider: OAuthProvider.google,
-            redirectTo: 'https://localhost:9000/welcome',
-            scopes: 'repo');
+        final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google, redirectTo: 'https://localhost:9000/welcome', scopes: 'repo');
         expect(res.url, isA<String>());
         expect(res.provider, OAuthProvider.google);
       });
@@ -414,18 +392,14 @@ void main() {
       expect(
         stream,
         emitsInOrder([
-          predicate<AuthState>(
-              (event) => event.event == AuthChangeEvent.signedIn),
-          predicate<AuthState>(
-              (event) => event.event == AuthChangeEvent.signedOut),
+          predicate<AuthState>((event) => event.event == AuthChangeEvent.signedIn),
+          predicate<AuthState>((event) => event.event == AuthChangeEvent.signedOut),
         ]),
       );
 
-      final expiredSession =
-          getSessionData(DateTime.now().subtract(Duration(hours: 1)));
+      final expiredSession = getSessionData(DateTime.now().subtract(Duration(hours: 1)));
 
-      await expectLater(client.recoverSession(expiredSession.sessionString),
-          throwsA(isA<AuthException>()));
+      await expectLater(client.recoverSession(expiredSession.sessionString), throwsA(isA<AuthException>()));
       expect(stream, emitsError(isA<AuthException>()));
 
       expect(client.currentSession, isNull);
@@ -501,8 +475,7 @@ void main() {
       );
     });
 
-    test('getOAuthSignInUrl with PKCE flow has the correct query parameters',
-        () async {
+    test('getOAuthSignInUrl with PKCE flow has the correct query parameters', () async {
       final response = await client.getOAuthSignInUrl(
         provider: OAuthProvider.google,
       );
@@ -515,20 +488,17 @@ void main() {
     });
 
     test('Parsing an error URL should throw', () async {
-      const errorMessage =
-          'Unverified email with spotify. A confirmation email has been sent to your spotify email';
+      const errorMessage = 'Unverified email with spotify. A confirmation email has been sent to your spotify email';
 
       // Supabase Auth returns a URL with `#` even when using pkce flow.
-      final urlWithoutAccessToken = Uri.parse(
-          'http://my-callback-url.com/#error=unauthorized_client&error_code=401&error_description=${Uri.encodeComponent(errorMessage)}');
+      final urlWithoutAccessToken = Uri.parse('http://my-callback-url.com/#error=unauthorized_client&error_code=401&error_description=${Uri.encodeComponent(errorMessage)}');
       try {
         await client.getSessionFromUrl(urlWithoutAccessToken);
         fail('getSessionFromUrl did not throw exception');
       } on AuthException catch (error) {
         expect(error.message, errorMessage);
       } catch (error) {
-        fail(
-            'getSessionFromUrl threw ${error.runtimeType} instead of AuthException');
+        fail('getSessionFromUrl threw ${error.runtimeType} instead of AuthException');
       }
     });
   });

@@ -178,8 +178,7 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
           body = null;
         } else if (response.request!.headers['Accept'] == 'text/csv') {
           body = response.body;
-        } else if (_headers['Accept'] != null &&
-            _headers['Accept']!.contains('application/vnd.pgrst.plan+text')) {
+        } else if (_headers['Accept'] != null && _headers['Accept']!.contains('application/vnd.pgrst.plan+text')) {
           body = response.body;
         } else {
           try {
@@ -200,8 +199,7 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
           throw PostgrestException(
             // https://github.com/PostgREST/postgrest/blob/a867d79c42419af16c18c3fb019eba8df992626f/src/PostgREST/Error.hs#L553
             code: '406',
-            details:
-                'Results contain ${body.length} rows, application/vnd.pgrst.object+json requires 1 row',
+            details: 'Results contain ${body.length} rows, application/vnd.pgrst.object+json requires 1 row',
             hint: null,
             message: 'JSON object requested, multiple (or no) rows returned',
           );
@@ -214,9 +212,7 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
 
       final contentRange = response.headers['content-range'];
       if (contentRange != null && contentRange.length > 1) {
-        count = contentRange.split('/').last == '*'
-            ? null
-            : int.parse(contentRange.split('/').last);
+        count = contentRange.split('/').last == '*' ? null : int.parse(contentRange.split('/').last);
       }
 
       body as dynamic;
@@ -291,12 +287,10 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
     http.Response response,
     PostgrestException error,
   ) {
-    if (error.details is String &&
-        error.details.toString().contains('Results contain 0 rows')) {
+    if (error.details is String && error.details.toString().contains('Results contain 0 rows')) {
       if (_count != null && response.request!.method != METHOD_HEAD) {
         if (_converter != null) {
-          return PostgrestResponse<S>(data: _converter!(null as R), count: 0)
-              as T;
+          return PostgrestResponse<S>(data: _converter!(null as R), count: 0) as T;
         } else {
           return null as T;
         }
@@ -317,8 +311,7 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
   ///
   /// [url] may be used to update based on a different url than the current one
   Uri appendSearchParams(String key, String value, [Uri? url]) {
-    final searchParams =
-        Map<String, dynamic>.from((url ?? _url).queryParametersAll);
+    final searchParams = Map<String, dynamic>.from((url ?? _url).queryParametersAll);
     searchParams[key] = [...searchParams[key] ?? [], value];
     return (url ?? _url).replace(queryParameters: searchParams);
   }
@@ -357,9 +350,7 @@ class PostgrestBuilder<T, S, R> implements Future<T> {
     FutureOr<U> Function(T value) onValue, {
     Function? onError,
   }) async {
-    if (onError != null &&
-        onError is! Function(Object, StackTrace) &&
-        onError is! Function(Object)) {
+    if (onError != null && onError is! Function(Object, StackTrace) && onError is! Function(Object)) {
       throw ArgumentError.value(
         onError,
         "onError",

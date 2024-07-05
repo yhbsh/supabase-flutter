@@ -76,13 +76,9 @@ class FunctionsClient {
   }) async {
     final bodyStr = body == null ? null : await _isolate.encode(body);
 
-    final uri = Uri.parse('$_url/$functionName')
-        .replace(queryParameters: queryParameters);
+    final uri = Uri.parse('$_url/$functionName').replace(queryParameters: queryParameters);
 
-    final finalHeaders = <String, String>{
-      ..._headers,
-      if (headers != null) ...headers
-    };
+    final finalHeaders = <String, String>{..._headers, if (headers != null) ...headers};
 
     final request = http.Request(method.name, uri);
 
@@ -91,19 +87,13 @@ class FunctionsClient {
     });
     if (bodyStr != null) request.body = bodyStr;
     final response = await (_httpClient?.send(request) ?? request.send());
-    final responseType = (response.headers['Content-Type'] ??
-            response.headers['content-type'] ??
-            'text/plain')
-        .split(';')[0]
-        .trim();
+    final responseType = (response.headers['Content-Type'] ?? response.headers['content-type'] ?? 'text/plain').split(';')[0].trim();
 
     final dynamic data;
 
     if (responseType == 'application/json') {
       final bodyBytes = await response.stream.toBytes();
-      data = bodyBytes.isEmpty
-          ? ""
-          : await _isolate.decode(utf8.decode(bodyBytes));
+      data = bodyBytes.isEmpty ? "" : await _isolate.decode(utf8.decode(bodyBytes));
     } else if (responseType == 'application/octet-stream') {
       data = await response.stream.toBytes();
     } else if (responseType == 'text/event-stream') {

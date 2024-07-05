@@ -55,8 +55,7 @@ class Fetch {
       headers['Content-Type'] = 'application/json';
     }
 
-    final request = http.Request(method, Uri.parse(url))
-      ..headers.addAll(headers);
+    final request = http.Request(method, Uri.parse(url))..headers.addAll(headers);
     if (body != null) {
       request.body = json.encode(body);
     }
@@ -80,9 +79,7 @@ class Fetch {
     StorageRetryController? retryController,
   ) async {
     final headers = options?.headers ?? {};
-    final contentType = fileOptions.contentType != null
-        ? MediaType.parse(fileOptions.contentType!)
-        : _parseMediaType(file.path);
+    final contentType = fileOptions.contentType != null ? MediaType.parse(fileOptions.contentType!) : _parseMediaType(file.path);
     final multipartFile = http.MultipartFile.fromBytes(
       '',
       file.readAsBytesSync(),
@@ -105,9 +102,7 @@ class Fetch {
           return request.send();
         }
       },
-      retryIf: (error) =>
-          retryController?.cancelled != true &&
-          (error is ClientException || error is TimeoutException),
+      retryIf: (error) => retryController?.cancelled != true && (error is ClientException || error is TimeoutException),
     );
 
     return _handleResponse(streamedResponse, options);
@@ -123,9 +118,7 @@ class Fetch {
     StorageRetryController? retryController,
   ) async {
     final headers = options?.headers ?? {};
-    final contentType = fileOptions.contentType != null
-        ? MediaType.parse(fileOptions.contentType!)
-        : _parseMediaType(url);
+    final contentType = fileOptions.contentType != null ? MediaType.parse(fileOptions.contentType!) : _parseMediaType(url);
     final multipartFile = http.MultipartFile.fromBytes(
       '',
       data,
@@ -149,9 +142,7 @@ class Fetch {
           return request.send();
         }
       },
-      retryIf: (error) =>
-          retryController?.cancelled != true &&
-          (error is ClientException || error is TimeoutException),
+      retryIf: (error) => retryController?.cancelled != true && (error is ClientException || error is TimeoutException),
     );
 
     return _handleResponse(streamedResponse, options);
@@ -210,8 +201,7 @@ class Fetch {
     required int retryAttempts,
     required StorageRetryController? retryController,
   }) async {
-    return _handleMultipartRequest('POST', url, file, fileOptions, options,
-        retryAttempts, retryController);
+    return _handleMultipartRequest('POST', url, file, fileOptions, options, retryAttempts, retryController);
   }
 
   Future<dynamic> putFile(

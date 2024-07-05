@@ -73,12 +73,7 @@ class RealtimeClient {
   late TimerCalculation reconnectAfterMs;
   WebSocketChannel? conn;
   List sendBuffer = [];
-  Map<String, List<Function>> stateChangeCallbacks = {
-    'open': [],
-    'close': [],
-    'error': [],
-    'message': []
-  };
+  Map<String, List<Function>> stateChangeCallbacks = {'open': [], 'close': [], 'error': [], 'message': []};
   int longpollerTimeout = 20000;
   SocketStates? connState;
 
@@ -111,8 +106,7 @@ class RealtimeClient {
     this.httpClient,
   })  : endPoint = Uri.parse('$endPoint/${Transports.websocket}')
             .replace(
-              queryParameters:
-                  logLevel == null ? null : {'log_level': logLevel.name},
+              queryParameters: logLevel == null ? null : {'log_level': logLevel.name},
             )
             .toString(),
         headers = {
@@ -123,14 +117,9 @@ class RealtimeClient {
     final customJWT = this.headers['Authorization']?.split(' ').last;
     accessToken = customJWT ?? params['apikey'];
 
-    this.reconnectAfterMs =
-        reconnectAfterMs ?? RetryTimer.createRetryFunction();
-    this.encode = encode ??
-        (dynamic payload, Function(String result) callback) =>
-            callback(json.encode(payload));
-    this.decode = decode ??
-        (String payload, Function(dynamic result) callback) =>
-            callback(json.decode(payload));
+    this.reconnectAfterMs = reconnectAfterMs ?? RetryTimer.createRetryFunction();
+    this.encode = encode ?? (dynamic payload, Function(String result) callback) => callback(json.encode(payload));
+    this.decode = decode ?? (String payload, Function(dynamic result) callback) => callback(json.decode(payload));
     reconnectTimer = RetryTimer(
       () {
         disconnect();
@@ -207,8 +196,7 @@ class RealtimeClient {
   }
 
   Future<List<String>> removeAllChannels() async {
-    final values =
-        await Future.wait(channels.map((channel) => channel.unsubscribe()));
+    final values = await Future.wait(channels.map((channel) => channel.unsubscribe()));
     disconnect();
     return values;
   }
@@ -285,8 +273,7 @@ class RealtimeClient {
       encode(message.toJson(), (result) => conn?.sink.add(result));
     }
 
-    log('push', '${message.topic} ${message.event} (${message.ref})',
-        message.payload);
+    log('push', '${message.topic} ${message.event} (${message.ref})', message.payload);
 
     if (isConnected) {
       callback();
@@ -312,13 +299,11 @@ class RealtimeClient {
         payload,
       );
 
-      channels
-          .where((channel) => channel.isMember(topic))
-          .forEach((channel) => channel.trigger(
-                event,
-                payload,
-                ref,
-              ));
+      channels.where((channel) => channel.isMember(topic)).forEach((channel) => channel.trigger(
+            event,
+            payload,
+            ref,
+          ));
       for (final callback in stateChangeCallbacks['message']!) {
         callback(msg);
       }

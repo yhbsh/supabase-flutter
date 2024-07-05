@@ -34,10 +34,7 @@ void main() {
   });
 
   test('embedded eq', () async {
-    final res = await postgrest
-        .from('users')
-        .select('messages(*)')
-        .eq('messages.channel_id', 1);
+    final res = await postgrest.from('users').select('messages(*)').eq('messages.channel_id', 1);
     expect(
       res[0]['messages']!.length,
       2,
@@ -57,10 +54,7 @@ void main() {
   });
 
   test('embedded order', () async {
-    final res = await postgrest
-        .from('users')
-        .select('messages(*)')
-        .order('channel_id', referencedTable: 'messages');
+    final res = await postgrest.from('users').select('messages(*)').order('channel_id', referencedTable: 'messages');
     expect(
       res[0]['messages']!.length,
       3,
@@ -76,11 +70,7 @@ void main() {
   });
 
   test('embedded order on multiple columns', () async {
-    final res = await postgrest
-        .from('users')
-        .select('username, messages(*)')
-        .order('username', ascending: true)
-        .order('channel_id', referencedTable: 'messages');
+    final res = await postgrest.from('users').select('username, messages(*)').order('username', ascending: true).order('channel_id', referencedTable: 'messages');
     expect(
       res[0]['username'],
       'awailas',
@@ -104,10 +94,7 @@ void main() {
   });
 
   test('embedded limit', () async {
-    final res = await postgrest
-        .from('users')
-        .select('messages(*)')
-        .limit(1, referencedTable: 'messages');
+    final res = await postgrest.from('users').select('messages(*)').limit(1, referencedTable: 'messages');
     expect(
       res[0]['messages']!.length,
       1,
@@ -127,10 +114,7 @@ void main() {
   });
 
   test('embedded range', () async {
-    final res = await postgrest
-        .from('users')
-        .select('messages(*)')
-        .range(1, 1, referencedTable: 'messages');
+    final res = await postgrest.from('users').select('messages(*)').range(1, 1, referencedTable: 'messages');
     expect(
       res[0]['messages']!.length,
       1,

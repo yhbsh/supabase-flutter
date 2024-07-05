@@ -6,6 +6,5 @@ class RemoveSubscriptionResult {
   final SupabaseRealtimeError? error;
 
   @override
-  String toString() =>
-      'RemoveSubscriptionResult(openSubscriptions: $openSubscriptions, error: $error)';
+  String toString() => 'RemoveSubscriptionResult(openSubscriptions: $openSubscriptions, error: $error)';
 }

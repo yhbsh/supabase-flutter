@@ -18,11 +18,7 @@ class GotrueFetch {
 
   String _getErrorMessage(dynamic error) {
     if (error is Map) {
-      return error['msg'] ??
-          error['message'] ??
-          error['error_description'] ??
-          error['error']?.toString() ??
-          error.toString();
+      return error['msg'] ?? error['message'] ?? error['error_description'] ?? error['error']?.toString() ?? error.toString();
     }
 
     return error.toString();
@@ -46,18 +42,11 @@ class GotrueFetch {
     try {
       data = jsonDecode(error.body);
     } catch (error) {
-      throw AuthUnknownException(
-          message: error.toString(), originalError: error);
+      throw AuthUnknownException(message: error.toString(), originalError: error);
     }
 
     // Check if weak password reasons only contain strings
-    if (data is Map &&
-        data['weak_password'] is Map &&
-        data['weak_password']['reasons'] is List &&
-        (data['weak_password']['reasons'] as List).isNotEmpty &&
-        (data['weak_password']['reasons'] as List)
-            .whereNot((element) => element is String)
-            .isEmpty) {
+    if (data is Map && data['weak_password'] is Map && data['weak_password']['reasons'] is List && (data['weak_password']['reasons'] as List).isNotEmpty && (data['weak_password']['reasons'] as List).whereNot((element) => element is String).isEmpty) {
       throw AuthWeakPasswordException(
         message: _getErrorMessage(data),
         statusCode: error.statusCode.toString(),
@@ -88,8 +77,7 @@ class GotrueFetch {
     Uri uri = Uri.parse(url);
     uri = uri.replace(queryParameters: {...uri.queryParameters, ...qs});
 
-    return await _handleRequest(
-        method: method, uri: uri, options: options, headers: headers);
+    return await _handleRequest(method: method, uri: uri, options: options, headers: headers);
   }
 
   Future<dynamic> _handleRequest({

@@ -5,16 +5,13 @@ class AuthException implements Exception {
   const AuthException(this.message, {this.statusCode});
 
   @override
-  String toString() =>
-      'AuthException(message: $message, statusCode: $statusCode)';
+  String toString() => 'AuthException(message: $message, statusCode: $statusCode)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AuthException &&
-        other.message == message &&
-        other.statusCode == statusCode;
+    return other is AuthException && other.message == message && other.statusCode == statusCode;
   }
 
   @override
@@ -26,8 +23,7 @@ class AuthPKCEGrantCodeExchangeError extends AuthException {
 }
 
 class AuthSessionMissingException extends AuthException {
-  AuthSessionMissingException()
-      : super('Auth session missing!', statusCode: '400');
+  AuthSessionMissingException() : super('Auth session missing!', statusCode: '400');
 }
 
 class AuthRetryableFetchException extends AuthException {
@@ -38,15 +34,13 @@ class AuthRetryableFetchException extends AuthException {
 }
 
 class AuthApiException extends AuthException {
-  AuthApiException(String message, {String? statusCode})
-      : super(message, statusCode: statusCode);
+  AuthApiException(String message, {String? statusCode}) : super(message, statusCode: statusCode);
 }
 
 class AuthUnknownException extends AuthException {
   final Object originalError;
 
-  AuthUnknownException({required String message, required this.originalError})
-      : super(message);
+  AuthUnknownException({required String message, required this.originalError}) : super(message);
 }
 
 class AuthWeakPasswordException extends AuthException {

@@ -59,8 +59,7 @@ class GoTrueMFAApi {
       ),
     );
 
-    data['totp']['qr_code'] =
-        'data:image/svg+xml;utf-8,${data['totp']['qr_code']}';
+    data['totp']['qr_code'] = 'data:image/svg+xml;utf-8,${data['totp']['qr_code']}';
 
     final response = AuthMFAEnrollResponse.fromJson(data);
     return response;
@@ -145,11 +144,7 @@ class GoTrueMFAApi {
     await _client.refreshSession();
     final user = _client.currentUser;
     final factors = user?.factors ?? [];
-    final totp = factors
-        .where((factor) =>
-            factor.factorType == FactorType.totp &&
-            factor.status == FactorStatus.verified)
-        .toList();
+    final totp = factors.where((factor) => factor.factorType == FactorType.totp && factor.status == FactorStatus.verified).toList();
 
     return AuthMFAListFactorsResponse(all: factors, totp: totp);
   }
@@ -157,8 +152,7 @@ class GoTrueMFAApi {
   /// Returns the Authenticator Assurance Level (AAL) for the active session.
   ///
   /// You can use this to check whether the current user needs to be shown a screen to verify their MFA factors.
-  AuthMFAGetAuthenticatorAssuranceLevelResponse
-      getAuthenticatorAssuranceLevel() {
+  AuthMFAGetAuthenticatorAssuranceLevelResponse getAuthenticatorAssuranceLevel() {
     final session = _client.currentSession;
     if (session == null) {
       return AuthMFAGetAuthenticatorAssuranceLevelResponse(
@@ -169,20 +163,15 @@ class GoTrueMFAApi {
     }
     final payload = Jwt.parseJwt(session.accessToken);
 
-    final currentLevel = AuthenticatorAssuranceLevels.values
-        .firstWhereOrNull((level) => level.name == payload['aal']);
+    final currentLevel = AuthenticatorAssuranceLevels.values.firstWhereOrNull((level) => level.name == payload['aal']);
 
     var nextLevel = currentLevel;
 
-    if (session.user.factors
-            ?.any((factor) => factor.status == FactorStatus.verified) ??
-        false) {
+    if (session.user.factors?.any((factor) => factor.status == FactorStatus.verified) ?? false) {
       nextLevel = AuthenticatorAssuranceLevels.aal2;
     }
 
-    final amr = (payload['amr'] as List)
-        .map((e) => AMREntry.fromJson(Map.from(e)))
-        .toList();
+    final amr = (payload['amr'] as List).map((e) => AMREntry.fromJson(Map.from(e))).toList();
     return AuthMFAGetAuthenticatorAssuranceLevelResponse(
       currentLevel: currentLevel,
       nextLevel: nextLevel,

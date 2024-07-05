@@ -13,11 +13,9 @@ String dec2hex(int dec) {
 String generatePKCEVerifier() {
   const verifierLength = 56;
   final random = Random.secure();
-  return base64UrlEncode(
-      List.generate(verifierLength, (_) => random.nextInt(256))).split('=')[0];
+  return base64UrlEncode(List.generate(verifierLength, (_) => random.nextInt(256))).split('=')[0];
 }
 
 String generatePKCEChallenge(String verifier) {
-  return base64UrlEncode(sha256.convert(ascii.encode(verifier)).bytes)
-      .split('=')[0];
+  return base64UrlEncode(sha256.convert(ascii.encode(verifier)).bytes).split('=')[0];
 }

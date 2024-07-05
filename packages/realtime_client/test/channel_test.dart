@@ -23,8 +23,7 @@ void main() {
   group('constructor', () {
     setUp(() {
       socket = RealtimeClient('', timeout: const Duration(milliseconds: 1234));
-      channel =
-          RealtimeChannel('topic', socket, params: RealtimeChannelConfig());
+      channel = RealtimeChannel('topic', socket, params: RealtimeChannelConfig());
     });
 
     test('sets defaults', () {
@@ -133,8 +132,7 @@ void main() {
 
     test('sets up callback for event', () {
       var callbackCalled = 0;
-      channel.onEvents('event', ChannelFilter(),
-          (dynamic payload, [dynamic ref]) => callbackCalled++);
+      channel.onEvents('event', ChannelFilter(), (dynamic payload, [dynamic ref]) => callbackCalled++);
 
       channel.trigger('event', {});
       expect(callbackCalled, 1);
@@ -161,8 +159,7 @@ void main() {
 
     test('"*" bind all events', () {
       var callbackCalled = 0;
-      channel.onEvents('realtime', ChannelFilter(event: '*'),
-          (dynamic payload, [dynamic ref]) => callbackCalled++);
+      channel.onEvents('realtime', ChannelFilter(event: '*'), (dynamic payload, [dynamic ref]) => callbackCalled++);
 
       channel.trigger('realtime', {'event': 'INSERT'});
       channel.trigger('realtime', {'event': 'UPDATE'});
@@ -183,12 +180,9 @@ void main() {
       var callbackEventCalled2 = 0;
       var callbackOtherCalled = 0;
 
-      channel.onEvents('event', ChannelFilter(),
-          (dynamic payload, [dynamic ref]) => callBackEventCalled1++);
-      channel.onEvents('event', ChannelFilter(),
-          (dynamic payload, [dynamic ref]) => callbackEventCalled2++);
-      channel.onEvents('other', ChannelFilter(),
-          (dynamic payload, [dynamic ref]) => callbackOtherCalled++);
+      channel.onEvents('event', ChannelFilter(), (dynamic payload, [dynamic ref]) => callBackEventCalled1++);
+      channel.onEvents('event', ChannelFilter(), (dynamic payload, [dynamic ref]) => callbackEventCalled2++);
+      channel.onEvents('other', ChannelFilter(), (dynamic payload, [dynamic ref]) => callbackOtherCalled++);
 
       channel.off('event', {});
 
@@ -261,8 +255,7 @@ void main() {
     });
 
     test('sets endpoint', () {
-      expect(channel.broadcastEndpointURL,
-          'http://${mockServer.address.host}:${mockServer.port}/realtime/v1/api/broadcast');
+      expect(channel.broadcastEndpointURL, 'http://${mockServer.address.host}:${mockServer.port}/realtime/v1/api/broadcast');
       expect(channel.subTopic, 'myTopic');
     });
 
@@ -290,9 +283,7 @@ void main() {
       });
     });
 
-    test(
-        'send message via http request to Broadcast endpoint when not subscribed to channel',
-        () async {
+    test('send message via http request to Broadcast endpoint when not subscribed to channel', () async {
       final completer = Completer<ChannelResponse>();
       channel.send(
         type: RealtimeListenTypes.broadcast,
@@ -325,8 +316,7 @@ void main() {
   group('presence', () {
     setUp(() {
       socket = RealtimeClient('', timeout: const Duration(milliseconds: 1234));
-      channel =
-          RealtimeChannel('topic', socket, params: RealtimeChannelConfig());
+      channel = RealtimeChannel('topic', socket, params: RealtimeChannelConfig());
     });
 
     test('description', () async {

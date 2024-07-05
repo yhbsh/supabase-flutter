@@ -116,10 +116,7 @@ class SupabaseClient {
         _storageUrl = '$supabaseUrl/storage/v1',
         _functionsUrl = '$supabaseUrl/functions/v1',
         _postgrestOptions = postgrestOptions,
-        _headers = {
-          ...Constants.defaultHeaders,
-          if (headers != null) ...headers
-        },
+        _headers = {...Constants.defaultHeaders, if (headers != null) ...headers},
         _httpClient = httpClient,
         _isolate = isolate ?? (YAJsonIsolate()..initialize()) {
     auth = _initSupabaseAuthClient(
@@ -127,8 +124,7 @@ class SupabaseClient {
       gotrueAsyncStorage: authOptions.pkceAsyncStorage,
       authFlowType: authOptions.authFlowType,
     );
-    _authHttpClient =
-        AuthHttpClient(_supabaseKey, httpClient ?? Client(), auth);
+    _authHttpClient = AuthHttpClient(_supabaseKey, httpClient ?? Client(), auth);
     rest = _initRestClient();
     functions = _initFunctionsClient();
     storage = _initStorageClient(storageOptions.retryAttempts);
@@ -178,8 +174,7 @@ class SupabaseClient {
   }
 
   /// Creates a Realtime channel with Broadcast, Presence, and Postgres Changes.
-  RealtimeChannel channel(String name,
-      {RealtimeChannelConfig opts = const RealtimeChannelConfig()}) {
+  RealtimeChannel channel(String name, {RealtimeChannelConfig opts = const RealtimeChannelConfig()}) {
     return realtime.channel(name, opts);
   }
 
@@ -288,12 +283,9 @@ class SupabaseClient {
   }
 
   void _handleTokenChanged(AuthChangeEvent event, String? token) {
-    if (event == AuthChangeEvent.initialSession ||
-        event == AuthChangeEvent.tokenRefreshed ||
-        event == AuthChangeEvent.signedIn) {
+    if (event == AuthChangeEvent.initialSession || event == AuthChangeEvent.tokenRefreshed || event == AuthChangeEvent.signedIn) {
       realtime.setAuth(token);
-    } else if (event == AuthChangeEvent.signedOut ||
-        event == AuthChangeEvent.userDeleted) {
+    } else if (event == AuthChangeEvent.signedOut || event == AuthChangeEvent.userDeleted) {
       // Token is removed
 
       realtime.setAuth(_supabaseKey);

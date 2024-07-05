@@ -34,9 +34,7 @@ class Bucket {
         updatedAt = json['updated_at'] as String,
         public = json['public'] as bool,
         fileSizeLimit = json['file_size_limit'] as int?,
-        allowedMimeTypes = json['allowed_mime_types'] == null
-            ? null
-            : List<String>.from(json['allowed_mime_types'] as List);
+        allowedMimeTypes = json['allowed_mime_types'] == null ? null : List<String>.from(json['allowed_mime_types'] as List);
 }
 
 class FileObject {
@@ -71,8 +69,7 @@ class FileObject {
         createdAt = json['created_at'] as String?,
         lastAccessedAt = json['last_accessed_at'] as String?,
         metadata = json['metadata'] as Map<String, dynamic>?,
-        buckets =
-            json['buckets'] != null ? Bucket.fromJson(json['buckets']) : null;
+        buckets = json['buckets'] != null ? Bucket.fromJson(json['buckets']) : null;
 }
 
 /// [public] The visibility of the bucket. Public buckets don't require an
@@ -188,9 +185,7 @@ class SignedUrl {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is SignedUrl &&
-        other.path == path &&
-        other.signedUrl == signedUrl;
+    return other is SignedUrl && other.path == path && other.signedUrl == signedUrl;
   }
 
   @override

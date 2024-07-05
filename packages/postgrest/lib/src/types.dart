@@ -59,8 +59,7 @@ class PostgrestResponse<T> {
 
   final int count;
 
-  factory PostgrestResponse.fromJson(Map<String, dynamic> json) =>
-      PostgrestResponse<T>(
+  factory PostgrestResponse.fromJson(Map<String, dynamic> json) => PostgrestResponse<T>(
         data: json['data'] as T,
         count: json['count'] as int,
       );

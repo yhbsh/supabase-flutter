@@ -35,18 +35,8 @@ void main() {
           'type': 'int8',
           'type_modifier': 4294967295
         },
-        {
-          'flags': [],
-          'name': 'name',
-          'type': 'text',
-          'type_modifier': 4294967295
-        },
-        {
-          'flags': [],
-          'name': 'continent',
-          'type': 'continents',
-          'type_modifier': 4294967295
-        }
+        {'flags': [], 'name': 'name', 'type': 'text', 'type_modifier': 4294967295},
+        {'flags': [], 'name': 'continent', 'type': 'continents', 'type_modifier': 4294967295}
       ];
       final records = {'id': '253', 'name': 'Singapore', 'continent': null};
       expect(
@@ -170,11 +160,7 @@ void main() {
         ],
         "commit_timestamp": "2022-09-21T04:15:16.267254+00:00",
         "errors": null,
-        "record": {
-          "content": "some content",
-          "created_at": "2022-09-21T04:15:13+00:00",
-          "id": 4
-        },
+        "record": {"content": "some content", "created_at": "2022-09-21T04:15:13+00:00", "id": 4},
         "schema": "public",
         "table": "random",
         "type": "INSERT"
@@ -185,11 +171,7 @@ void main() {
         'table': 'random',
         'commit_timestamp': '2022-09-21T04:15:16.267254+00:00',
         'eventType': 'INSERT',
-        'new': {
-          "content": "some content",
-          "created_at": "2022-09-21T04:15:13+00:00",
-          "id": 4
-        },
+        'new': {"content": "some content", "created_at": "2022-09-21T04:15:13+00:00", "id": 4},
         'old': {},
         'errors': null,
       };
@@ -206,11 +188,7 @@ void main() {
           ],
           "commit_timestamp": "2022-09-21T04:59:30Z",
           "errors": null,
-          "record": {
-            "content": "some content",
-            "created_at": "2022-09-21T04:15:13+00:00",
-            "id": 4
-          },
+          "record": {"content": "some content", "created_at": "2022-09-21T04:15:13+00:00", "id": 4},
           "schema": "public",
           "table": "random",
           "type": "INSERT"
@@ -223,11 +201,7 @@ void main() {
         'table': 'random',
         'commit_timestamp': '2022-09-21T04:59:30Z',
         'eventType': 'INSERT',
-        'new': {
-          "content": "some content",
-          "created_at": "2022-09-21T04:15:13+00:00",
-          "id": 4
-        },
+        'new': {"content": "some content", "created_at": "2022-09-21T04:15:13+00:00", "id": 4},
         'old': {},
         'errors': null,
       };

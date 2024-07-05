@@ -6,8 +6,7 @@ import 'package:storage_client/storage_client.dart';
 import 'package:test/test.dart';
 
 const storageUrl = 'http://localhost:8000/storage/v1';
-const storageKey =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJhdWQiOiIiLCJzdWIiOiIzMTdlYWRjZS02MzFhLTQ0MjktYTBiYi1mMTlhN2E1MTdiNGEiLCJSb2xlIjoicG9zdGdyZXMifQ.pZobPtp6gDcX0UbzMmG3FHSlg4m4Q-22tKtGWalOrNo';
+const storageKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJhdWQiOiIiLCJzdWIiOiIzMTdlYWRjZS02MzFhLTQ0MjktYTBiYi1mMTlhN2E1MTdiNGEiLCJSb2xlIjoicG9zdGdyZXMifQ.pZobPtp6gDcX0UbzMmG3FHSlg4m4Q-22tKtGWalOrNo';
 
 final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
 final newBucketName = 'my-new-bucket-$timestamp';
@@ -34,8 +33,7 @@ void main() {
       'Authorization': 'Bearer $storageKey',
     });
 
-    file = File(join(
-        Directory.current.path, 'test', 'fixtures', 'upload', 'sadcat.jpg'));
+    file = File(join(Directory.current.path, 'test', 'fixtures', 'upload', 'sadcat.jpg'));
   });
 
   test('List files', () async {
@@ -113,8 +111,7 @@ void main() {
         allowedMimeTypes: ['image/jpeg'],
       ),
     );
-    final updateRes = await storage.updateBucket(
-        newBucketName, const BucketOptions(public: false));
+    final updateRes = await storage.updateBucket(newBucketName, const BucketOptions(public: false));
     expect(updateRes, 'Successfully updated');
     final getRes = await storage.getBucket(newBucketName);
     expect(getRes.public, isFalse);
@@ -147,8 +144,7 @@ void main() {
     });
 
     test('sign url for upload', () async {
-      final response =
-          await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
+      final response = await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
 
       expect(response.path, uploadPath);
       expect(response.token, isNotNull);
@@ -160,41 +156,29 @@ void main() {
     });
 
     test('can upload with a signed url', () async {
-      final response =
-          await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
+      final response = await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
 
-      final uploadedPath = await storage
-          .from(newBucketName)
-          .uploadToSignedUrl(response.path, response.token, file);
+      final uploadedPath = await storage.from(newBucketName).uploadToSignedUrl(response.path, response.token, file);
 
       expect(uploadedPath, uploadPath);
     });
 
     test('can upload a binary file with a signed url', () async {
-      final response =
-          await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
+      final response = await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
 
-      final uploadedPath = await storage
-          .from(newBucketName)
-          .uploadBinaryToSignedUrl(
-              response.path, response.token, file.readAsBytesSync());
+      final uploadedPath = await storage.from(newBucketName).uploadBinaryToSignedUrl(response.path, response.token, file.readAsBytesSync());
 
       expect(uploadedPath, uploadPath);
     });
 
     test('cannot upload to a signed url twice', () async {
-      final response =
-          await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
+      final response = await storage.from(newBucketName).createSignedUploadUrl(uploadPath);
 
-      final uploadedPath = await storage
-          .from(newBucketName)
-          .uploadToSignedUrl(response.path, response.token, file);
+      final uploadedPath = await storage.from(newBucketName).uploadToSignedUrl(response.path, response.token, file);
 
       expect(uploadedPath, uploadPath);
       try {
-        await storage
-            .from(newBucketName)
-            .uploadToSignedUrl(response.path, response.token, file);
+        await storage.from(newBucketName).uploadToSignedUrl(response.path, response.token, file);
       } on StorageException catch (error) {
         expect(error.error, 'Duplicate');
         expect(error.message, 'The resource already exists');
@@ -210,25 +194,19 @@ void main() {
     });
 
     test('sign url with transform options', () async {
-      final url =
-          await storage.from(newBucketName).createSignedUrl(uploadPath, 2000,
-              transform: TransformOptions(
-                width: 100,
-                height: 100,
-              ));
+      final url = await storage.from(newBucketName).createSignedUrl(uploadPath, 2000,
+          transform: TransformOptions(
+            width: 100,
+            height: 100,
+          ));
 
-      expect(
-          url.contains(
-              '$storageUrl/render/image/sign/$newBucketName/$uploadPath'),
-          isTrue);
+      expect(url.contains('$storageUrl/render/image/sign/$newBucketName/$uploadPath'), isTrue);
     });
 
     test('gets public url with transformation options', () async {
-      final url = storage.from(newBucketName).getPublicUrl(uploadPath,
-          transform: TransformOptions(width: 200, height: 300, quality: 60));
+      final url = storage.from(newBucketName).getPublicUrl(uploadPath, transform: TransformOptions(width: 200, height: 300, quality: 60));
 
-      expect(url,
-          '$storageUrl/render/image/public/$newBucketName/$uploadPath?width=200&height=300&quality=60');
+      expect(url, '$storageUrl/render/image/public/$newBucketName/$uploadPath?width=200&height=300&quality=60');
     });
 
     test('will download a public transformed file', () async {
@@ -238,8 +216,7 @@ void main() {
             height: 200,
           ));
 
-      final downloadedFile =
-          await File('${Directory.current.path}/public-image.jpg').create();
+      final downloadedFile = await File('${Directory.current.path}/public-image.jpg').create();
       await downloadedFile.writeAsBytes(bytesArray);
       final size = await downloadedFile.length();
       final type = lookupMimeType(downloadedFile.path);
@@ -253,12 +230,9 @@ void main() {
 
       await storage.from(privateBucketName).upload(uploadPath, file);
 
-      final bytesArray = await storage.from(privateBucketName).download(
-          uploadPath,
-          transform: TransformOptions(width: 200, height: 200));
+      final bytesArray = await storage.from(privateBucketName).download(uploadPath, transform: TransformOptions(width: 200, height: 200));
 
-      final downloadedFile =
-          await File('${Directory.current.path}/private-image.jpg').create();
+      final downloadedFile = await File('${Directory.current.path}/private-image.jpg').create();
       await downloadedFile.writeAsBytes(bytesArray);
       final size = await downloadedFile.length();
       final type = lookupMimeType(
@@ -271,8 +245,7 @@ void main() {
     });
 
     test('will return the image as webp when the browser support it', () async {
-      final storage = SupabaseStorageClient(storageUrl,
-          {'Authorization': 'Bearer $storageKey', 'Accept': 'image/webp'});
+      final storage = SupabaseStorageClient(storageUrl, {'Authorization': 'Bearer $storageKey', 'Accept': 'image/webp'});
 
       final bytesArray = await storage.from(newBucketName).download(
             uploadPath,
@@ -281,8 +254,7 @@ void main() {
               height: 200,
             ),
           );
-      final downloadedFile =
-          await File('${Directory.current.path}/webpimage').create();
+      final downloadedFile = await File('${Directory.current.path}/webpimage').create();
       await downloadedFile.writeAsBytes(bytesArray);
       final size = await downloadedFile.length();
       final type = lookupMimeType(
@@ -294,10 +266,8 @@ void main() {
       expect(type, 'image/webp');
     });
 
-    test('will return the original image format when format is origin',
-        () async {
-      final storage = SupabaseStorageClient(storageUrl,
-          {'Authorization': 'Bearer $storageKey', 'Accept': 'image/webp'});
+    test('will return the original image format when format is origin', () async {
+      final storage = SupabaseStorageClient(storageUrl, {'Authorization': 'Bearer $storageKey', 'Accept': 'image/webp'});
 
       final bytesArray = await storage.from(newBucketName).download(
             uploadPath,
@@ -307,8 +277,7 @@ void main() {
               format: RequestImageFormat.origin,
             ),
           );
-      final downloadedFile =
-          await File('${Directory.current.path}/jpegimage').create();
+      final downloadedFile = await File('${Directory.current.path}/jpegimage').create();
       await downloadedFile.writeAsBytes(bytesArray);
       final size = await downloadedFile.length();
       final type = lookupMimeType(
@@ -383,8 +352,7 @@ void main() {
 
   group('file operations', () {
     test('copy', () async {
-      final storage = SupabaseStorageClient(
-          storageUrl, {'Authorization': 'Bearer $storageKey'});
+      final storage = SupabaseStorageClient(storageUrl, {'Authorization': 'Bearer $storageKey'});
 
       await storage.from(newBucketName).copy(uploadPath, "$uploadPath 2");
     });

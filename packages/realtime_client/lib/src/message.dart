@@ -45,8 +45,7 @@ class Message {
     }
     return {
       'topic': topic,
-      'event':
-          event != ChannelEvents.heartbeat ? event.eventName() : 'heartbeat',
+      'event': event != ChannelEvents.heartbeat ? event.eventName() : 'heartbeat',
       'payload': processedPayload,
       'ref': ref,
       if (joinRef != null) 'join_ref': joinRef,

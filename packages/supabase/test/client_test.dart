@@ -18,8 +18,7 @@ void main() {
 
   group('Standard Header', () {
     late String supabaseUrl;
-    const supabaseKey =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53emxkenlsb2pyemdqemloZHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODQxMzI2ODAsImV4cCI6MTk5OTcwODY4MH0.MU-LVeAPic93VLcRsHktxzYtBKBUMWAQb8E-0AQETPs';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53emxkenlsb2pyemdqemloZHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODQxMzI2ODAsImV4cCI6MTk5OTcwODY4MH0.MU-LVeAPic93VLcRsHktxzYtBKBUMWAQb8E-0AQETPs';
     late SupabaseClient supabase;
     late HttpServer mockServer;
 
@@ -41,15 +40,13 @@ void main() {
         supabaseClient: supabase,
       );
 
-      final xClientHeaderBeforeSlash =
-          request.headers['X-Client-Info']?.first.split('/').first;
+      final xClientHeaderBeforeSlash = request.headers['X-Client-Info']?.first.split('/').first;
 
       expect(xClientHeaderBeforeSlash, 'supabase-dart');
     });
 
     test('X-Client-Info header is set properly on storage', () {
-      final xClientHeaderBeforeSlash =
-          supabase.storage.headers['X-Client-Info']!.split('/').first;
+      final xClientHeaderBeforeSlash = supabase.storage.headers['X-Client-Info']!.split('/').first;
       expect(xClientHeaderBeforeSlash, 'supabase-dart');
     });
 
@@ -69,9 +66,7 @@ void main() {
     });
 
     test('log_level query parameter is properly set', () async {
-      supabase = SupabaseClient(supabaseUrl, supabaseKey,
-          realtimeClientOptions:
-              RealtimeClientOptions(logLevel: RealtimeLogLevel.info));
+      supabase = SupabaseClient(supabaseUrl, supabaseKey, realtimeClientOptions: RealtimeClientOptions(logLevel: RealtimeLogLevel.info));
 
       final request = await getRealtimeRequest(
         server: mockServer,
@@ -102,8 +97,7 @@ void main() {
 
   group('auth', () {
     test('properly set Authorization header', () async {
-      final (:sessionString, :accessToken) =
-          getSessionData(DateTime.now().add(Duration(hours: 1)));
+      final (:sessionString, :accessToken) = getSessionData(DateTime.now().add(Duration(hours: 1)));
 
       final mockServer = await HttpServer.bind('localhost', 0);
       final supabase = SupabaseClient(
@@ -123,8 +117,7 @@ void main() {
 
       // Check for every request if the Authorization header is set properly
       await for (final req in mockServer) {
-        expect(
-            req.headers.value('Authorization')?.split(" ").last, accessToken);
+        expect(req.headers.value('Authorization')?.split(" ").last, accessToken);
         count++;
         if (count == 4) {
           break;
@@ -166,8 +159,7 @@ void main() {
           }
           gotTokenRefresh = true;
           String sessionString;
-          (accessToken: secondAccessToken, :sessionString) =
-              getSessionData(DateTime.now().add(Duration(hours: 1)));
+          (accessToken: secondAccessToken, :sessionString) = getSessionData(DateTime.now().add(Duration(hours: 1)));
 
           req.response
             ..statusCode = HttpStatus.ok
@@ -175,8 +167,7 @@ void main() {
             ..write(sessionString)
             ..close();
         } else {
-          expect(req.headers.value('Authorization')?.split(" ").last,
-              secondAccessToken);
+          expect(req.headers.value('Authorization')?.split(" ").last, secondAccessToken);
           count++;
           if (count == 4) {
             break;

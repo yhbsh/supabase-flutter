@@ -1,7 +1,6 @@
 library gotrue;
 
-export 'src/constants.dart'
-    hide Constants, GenerateLinkTypeExtended, AuthChangeEventExtended;
+export 'src/constants.dart' hide Constants, GenerateLinkTypeExtended, AuthChangeEventExtended;
 export 'src/gotrue_admin_api.dart';
 export 'src/gotrue_client.dart';
 export 'src/types/auth_exception.dart';

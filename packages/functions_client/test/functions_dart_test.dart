@@ -14,8 +14,7 @@ void main() {
   group("Custom http client", () {
     setUp(() {
       customHttpClient = CustomHttpClient();
-      functionsCustomHttpClient =
-          FunctionsClient("", {}, httpClient: customHttpClient);
+      functionsCustomHttpClient = FunctionsClient("", {}, httpClient: customHttpClient);
     });
     test('function throws', () async {
       try {
@@ -33,8 +32,7 @@ void main() {
     });
 
     test('function call with query parameters', () async {
-      final res = await functionsCustomHttpClient
-          .invoke('function1', queryParameters: {'key': 'value'});
+      final res = await functionsCustomHttpClient.invoke('function1', queryParameters: {'key': 'value'});
 
       final request = customHttpClient.receivedRequests.last;
 

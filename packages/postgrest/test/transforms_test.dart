@@ -32,11 +32,7 @@ void main() {
   });
 
   test('order on multiple columns', () async {
-    final res = await postgrest
-        .from('users')
-        .select()
-        .order('status', ascending: true)
-        .order('username');
+    final res = await postgrest.from('users').select().order('status', ascending: true).order('username');
     expect(
       res.map((row) => row['status']),
       [
@@ -58,12 +54,7 @@ void main() {
   });
 
   test('order with filters on the same column', () async {
-    final res = await postgrest
-        .from('users')
-        .select()
-        .gt('username', 'b')
-        .lt('username', 'r')
-        .order('username');
+    final res = await postgrest.from('users').select().gt('username', 'b').lt('username', 'r').order('username');
     expect(
       res.map((row) => row['username']),
       [
@@ -213,52 +204,31 @@ void main() {
   });
 
   test('single', () async {
-    final res = await postgrest
-        .from('users')
-        .select()
-        .eq('username', 'supabot')
-        .single();
+    final res = await postgrest.from('users').select().eq('username', 'supabot').single();
     expect(res['username'], 'supabot');
     expect(res['status'], 'ONLINE');
   });
 
   test('single with count', () async {
-    final res = await postgrest
-        .from('users')
-        .select()
-        .limit(1)
-        .single()
-        .count(CountOption.exact);
+    final res = await postgrest.from('users').select().limit(1).single().count(CountOption.exact);
     expect(res.data, isA<Map>());
     expect(res.count, greaterThan(3));
   });
 
   group("maybe single", () {
     test('maybeSingle with 1 row', () async {
-      final user = await postgrest
-          .from('users')
-          .select()
-          .eq('username', 'dragarcia')
-          .maybeSingle();
+      final user = await postgrest.from('users').select().eq('username', 'dragarcia').maybeSingle();
       expect(user, isNotNull);
       expect(user?['username'], 'dragarcia');
     });
 
     test('maybeSingle with 0 row', () async {
-      final user = await postgrest
-          .from('users')
-          .select("*")
-          .eq('username', 'xxxxx')
-          .maybeSingle();
+      final user = await postgrest.from('users').select("*").eq('username', 'xxxxx').maybeSingle();
       expect(user, isNull);
     });
 
     test('maybeSingle with 0 rows', () async {
-      final user = await postgrest
-          .from('users')
-          .select()
-          .eq('username', 'xxxxx')
-          .maybeSingle();
+      final user = await postgrest.from('users').select().eq('username', 'xxxxx').maybeSingle();
       expect(user, isNull);
     });
 
@@ -269,8 +239,7 @@ void main() {
       } on PostgrestException catch (error) {
         expect(error.code, '406');
       } catch (error) {
-        fail(
-            'maybeSingle with multiple rows threw ${error.runtimeType} instead of PostgrestException.');
+        fail('maybeSingle with multiple rows threw ${error.runtimeType} instead of PostgrestException.');
       }
     });
     test('maybeSingle with multiple inserts throws', () async {
@@ -291,9 +260,7 @@ void main() {
       }
     });
 
-    test(
-        'maybeSingle followed by another transformer preserves the maybeSingle status',
-        () async {
+    test('maybeSingle followed by another transformer preserves the maybeSingle status', () async {
       try {
         // maybeSingle followed by another transformer preserves the maybeSingle status
         // and should throw when the returned data is more than 2 rows.
@@ -306,14 +273,9 @@ void main() {
       }
     });
 
-    test('maybeSingle with converter throws if more than 1 rows were returned',
-        () async {
+    test('maybeSingle with converter throws if more than 1 rows were returned', () async {
       try {
-        await postgrest
-            .from('channels')
-            .select()
-            .maybeSingle()
-            .withConverter((data) => data?.entries.length);
+        await postgrest.from('channels').select().maybeSingle().withConverter((data) => data?.entries.length);
         fail('Query did not throw');
       } on PostgrestException catch (error) {
         expect(error.code, '406');

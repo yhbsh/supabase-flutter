@@ -140,9 +140,7 @@ class GoTrueAdminApi {
     String? redirectTo,
   }) async {
     assert(
-      !(type == GenerateLinkType.emailChangeCurrent ||
-              type == GenerateLinkType.emailChangeNew) ||
-          newEmail != null,
+      !(type == GenerateLinkType.emailChangeCurrent || type == GenerateLinkType.emailChangeNew) || newEmail != null,
       'newEmail is required for emailChangeCurrent and emailChangeNew',
     );
     assert(

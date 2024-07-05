@@ -34,9 +34,7 @@ void main() {
           /// to the realtime subscription, so include the filter if the request
           /// includes a filter.
           final requestJson = jsonDecode(request);
-          final String? postgresFilter = requestJson['payload']['config']
-                  ['postgres_changes']
-              .first['filter'];
+          final String? postgresFilter = requestJson['payload']['config']['postgres_changes'].first['filter'];
 
           final topic = (jsonDecode(request as String) as Map)['topic'];
 
@@ -91,11 +89,7 @@ void main() {
                 'columns': [
                   {'name': 'id', 'type': 'int4', 'type_modifier': 4294967295},
                   {'name': 'task', 'type': 'text', 'type_modifier': 4294967295},
-                  {
-                    'name': 'status',
-                    'type': 'bool',
-                    'type_modifier': 4294967295
-                  },
+                  {'name': 'status', 'type': 'bool', 'type_modifier': 4294967295},
                 ],
                 'commit_timestamp': '2021-08-01T08:00:30Z',
                 'errors': null,
@@ -121,11 +115,7 @@ void main() {
                 'columns': [
                   {'name': 'id', 'type': 'int4', 'type_modifier': 4294967295},
                   {'name': 'task', 'type': 'text', 'type_modifier': 4294967295},
-                  {
-                    'name': 'status',
-                    'type': 'bool',
-                    'type_modifier': 4294967295
-                  },
+                  {'name': 'status', 'type': 'bool', 'type_modifier': 4294967295},
                 ],
                 'commit_timestamp': '2022-09-14T02:12:52Z',
                 'errors': null,
@@ -265,8 +255,7 @@ void main() {
     });
 
     test("correct CHANNEL_ERROR data on heartbeat timeout", () async {
-      final subscribeCallback =
-          expectAsync2((RealtimeSubscribeStatus event, error) {
+      final subscribeCallback = expectAsync2((RealtimeSubscribeStatus event, error) {
         if (event == RealtimeSubscribeStatus.channelError) {
           expect(error, isNull);
         } else {
@@ -278,15 +267,13 @@ void main() {
             event: PostgresChangeEvent.all,
             schema: 'public',
             table: 'todos',
-            filter: PostgresChangeFilter(
-                type: PostgresChangeFilterType.eq, column: 'id', value: 2),
+            filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'id', value: 2),
             callback: (payload) {},
           );
 
       channel.subscribe(subscribeCallback);
 
-      await client.conn!.sink
-          .close(Constants.wsCloseNormal, "heartbeat timeout");
+      await client.conn!.sink.close(Constants.wsCloseNormal, "heartbeat timeout");
     });
   });
 
@@ -312,9 +299,7 @@ void main() {
           /// includes a filter.
           final requestJson = jsonDecode(request);
 
-          final String? postgresFilter = requestJson['payload']['config']
-                  ['postgres_changes']
-              .first['filter'];
+          final String? postgresFilter = requestJson['payload']['config']['postgres_changes'].first['filter'];
 
           final topic = requestJson['topic'];
 
@@ -473,8 +458,7 @@ void main() {
               event: PostgresChangeEvent.all,
               schema: 'public',
               table: 'todos',
-              filter: PostgresChangeFilter(
-                  type: PostgresChangeFilterType.eq, column: 'id', value: 2),
+              filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'id', value: 2),
               callback: (payload) {
                 streamController.add(payload);
               })

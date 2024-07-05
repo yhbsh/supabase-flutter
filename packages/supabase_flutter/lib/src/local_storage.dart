@@ -5,8 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import './local_storage_stub.dart'
-    if (dart.library.html) './local_storage_web.dart' as web;
+import './local_storage_stub.dart' if (dart.library.html) './local_storage_web.dart' as web;
 
 const supabasePersistSessionKey = 'SUPABASE_PERSIST_SESSION_KEY';
 
@@ -68,8 +67,7 @@ class SharedPreferencesLocalStorage extends LocalStorage {
   SharedPreferencesLocalStorage({required this.persistSessionKey});
 
   final String persistSessionKey;
-  static const _useWebLocalStorage =
-      kIsWeb && bool.fromEnvironment("dart.library.html");
+  static const _useWebLocalStorage = kIsWeb && bool.fromEnvironment("dart.library.html");
 
   @override
   Future<void> initialize() async {

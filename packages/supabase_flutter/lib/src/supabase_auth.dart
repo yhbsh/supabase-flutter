@@ -134,11 +134,7 @@ class SupabaseAuth with WidgetsBindingObserver {
 
   /// If _authCallbackUrlHost not init, we treat all deep links as auth callback
   bool _isAuthCallbackDeeplink(Uri uri) {
-    return (uri.fragment.contains('access_token') &&
-            _authFlowType == AuthFlowType.implicit) ||
-        (uri.queryParameters.containsKey('code') &&
-            _authFlowType == AuthFlowType.pkce) ||
-        (uri.fragment.contains('error_description'));
+    return (uri.fragment.contains('access_token') && _authFlowType == AuthFlowType.implicit) || (uri.queryParameters.containsKey('code') && _authFlowType == AuthFlowType.pkce) || (uri.fragment.contains('error_description'));
   }
 
   /// Enable deep link observer to handle deep links
@@ -234,8 +230,7 @@ class SupabaseAuth with WidgetsBindingObserver {
 
   /// Callback when deeplink receiving throw error
   void _onErrorReceivingDeeplink(String message, StackTrace stackTrace) {
-    Supabase.instance
-        .log('onErrorReceivingDeepLink message: $message', stackTrace);
+    Supabase.instance.log('onErrorReceivingDeepLink message: $message', stackTrace);
   }
 }
 

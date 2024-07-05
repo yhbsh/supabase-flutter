@@ -64,8 +64,7 @@ extension PostgresChangeEventMethods on PostgresChangeEvent {
       case 'DELETE':
         return PostgresChangeEvent.delete;
     }
-    throw ArgumentError(
-        'Only "INSERT", "UPDATE", or "DELETE" can be can be passed to `fromString()` method.');
+    throw ArgumentError('Only "INSERT", "UPDATE", or "DELETE" can be can be passed to `fromString()` method.');
   }
 }
 
@@ -104,8 +103,7 @@ class ChannelFilter {
 enum ChannelResponse {
   ok,
   timedOut,
-  @Deprecated(
-      'Client side rate limiting has been removed, and this enum value will never be returned.')
+  @Deprecated('Client side rate limiting has been removed, and this enum value will never be returned.')
   rateLimited,
   error
 }
@@ -121,8 +119,7 @@ extension PresenceEventExtended on PresenceEvent {
         return event;
       }
     }
-    throw ArgumentError(
-        'Only "sync", "join", or "leave" can be can be passed to `fromString()` method.');
+    throw ArgumentError('Only "sync", "join", or "leave" can be can be passed to `fromString()` method.');
   }
 }
 
@@ -192,8 +189,7 @@ class PostgresChangePayload {
   PostgresChangePayload.fromPayload(Map<String, dynamic> payload)
       : schema = payload['schema'],
         table = payload['table'],
-        commitTimestamp =
-            DateTime.parse(payload['commit_timestamp'] ?? '19700101'),
+        commitTimestamp = DateTime.parse(payload['commit_timestamp'] ?? '19700101'),
         eventType = PostgresChangeEventMethods.fromString(payload['eventType']),
         newRecord = Map<String, dynamic>.from(payload['new']),
         oldRecord = Map<String, dynamic>.from(payload['old']),
@@ -209,24 +205,12 @@ class PostgresChangePayload {
     if (identical(this, other)) return true;
     final mapEquals = const DeepCollectionEquality().equals;
 
-    return other.schema == schema &&
-        other.table == table &&
-        other.commitTimestamp == commitTimestamp &&
-        other.eventType == eventType &&
-        mapEquals(other.newRecord, newRecord) &&
-        mapEquals(other.oldRecord, oldRecord) &&
-        other.errors == errors;
+    return other.schema == schema && other.table == table && other.commitTimestamp == commitTimestamp && other.eventType == eventType && mapEquals(other.newRecord, newRecord) && mapEquals(other.oldRecord, oldRecord) && other.errors == errors;
   }
 
   @override
   int get hashCode {
-    return schema.hashCode ^
-        table.hashCode ^
-        commitTimestamp.hashCode ^
-        eventType.hashCode ^
-        newRecord.hashCode ^
-        oldRecord.hashCode ^
-        errors.hashCode;
+    return schema.hashCode ^ table.hashCode ^ commitTimestamp.hashCode ^ eventType.hashCode ^ newRecord.hashCode ^ oldRecord.hashCode ^ errors.hashCode;
   }
 }
 
@@ -296,8 +280,7 @@ abstract class RealtimePresencePayload {
     required this.event,
   });
 
-  RealtimePresencePayload.fromJson(Map<String, dynamic> json)
-      : event = PresenceEventExtended.fromString(json['event']);
+  RealtimePresencePayload.fromJson(Map<String, dynamic> json) : event = PresenceEventExtended.fromString(json['event']);
 
   @override
   String toString() => 'PresencePayload(event: $event)';
@@ -349,8 +332,7 @@ class RealtimePresenceJoinPayload extends RealtimePresencePayload {
   }
 
   @override
-  String toString() =>
-      'PresenceJoinPayload(key: $key, newPresences: $newPresences, currentPresences: $currentPresences)';
+  String toString() => 'PresenceJoinPayload(key: $key, newPresences: $newPresences, currentPresences: $currentPresences)';
 }
 
 /// Payload for [PresenceEvent.leave] callback.
@@ -383,8 +365,7 @@ class RealtimePresenceLeavePayload extends RealtimePresencePayload {
   }
 
   @override
-  String toString() =>
-      'PresenceLeavePayload(key: $key, leftPresences: $leftPresences, currentPresences: $currentPresences)';
+  String toString() => 'PresenceLeavePayload(key: $key, leftPresences: $leftPresences, currentPresences: $currentPresences)';
 }
 
 /// A single client connected through presence.

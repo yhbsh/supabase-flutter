@@ -41,10 +41,7 @@ class NoEmailConfirmationHttpClient extends BaseClient {
                 {
                   'id': 'ef507d02-ce6a-4b3a-a8a6-6f0e14740136',
                   'user_id': 'ef507d02-ce6a-4b3a-a8a6-6f0e14740136',
-                  'identity_data': {
-                    'email': 'fake1@email.com',
-                    'sub': 'ef507d02-ce6a-4b3a-a8a6-6f0e14740136'
-                  },
+                  'identity_data': {'email': 'fake1@email.com', 'sub': 'ef507d02-ce6a-4b3a-a8a6-6f0e14740136'},
                   'provider': 'email',
                   'last_sign_in_at': now,
                   'created_at': now,
@@ -78,8 +75,7 @@ class RetryTestHttpClient extends BaseClient {
     final jwt = JWT(
       {
         'exp': (DateTime.now().millisecondsSinceEpoch / 1000).round() + 60,
-        'retry_count':
-            retryCount, // Add retryCount so that tokens issued on different retries are different.
+        'retry_count': retryCount, // Add retryCount so that tokens issued on different retries are different.
       },
       subject: userId1,
     );
@@ -111,23 +107,13 @@ class RetryTestHttpClient extends BaseClient {
                 },
                 'user_metadata': {},
                 'factors': [
-                  {
-                    'id': '1d3aa138-da96-4aea-8217-af07daa6b82d',
-                    'created_at': '2023-04-01T09:38:59.784028Z',
-                    'updated_at': '2023-04-01T09:38:59.784028Z',
-                    'status': 'unverified',
-                    'friendly_name': 'UnverifiedFactor',
-                    'factor_type': 'totp'
-                  }
+                  {'id': '1d3aa138-da96-4aea-8217-af07daa6b82d', 'created_at': '2023-04-01T09:38:59.784028Z', 'updated_at': '2023-04-01T09:38:59.784028Z', 'status': 'unverified', 'friendly_name': 'UnverifiedFactor', 'factor_type': 'totp'}
                 ],
                 'identities': [
                   {
                     'id': '18bc7a4e-c095-4573-93dc-e0be29bada97',
                     'user_id': '18bc7a4e-c095-4573-93dc-e0be29bada97',
-                    'identity_data': {
-                      'email': 'fake1@email.com',
-                      'sub': '18bc7a4e-c095-4573-93dc-e0be29bada97'
-                    },
+                    'identity_data': {'email': 'fake1@email.com', 'sub': '18bc7a4e-c095-4573-93dc-e0be29bada97'},
                     'provider': 'email',
                     'last_sign_in_at': '2023-04-01T09:38:59.784028Z',
                     'created_at': '2023-04-01T09:38:59.784028Z',

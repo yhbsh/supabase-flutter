@@ -3,8 +3,7 @@ part of 'postgrest_builder.dart';
 class PostgrestTransformBuilder<T> extends RawPostgrestBuilder<T, T, T> {
   PostgrestTransformBuilder(super.builder);
 
-  PostgrestTransformBuilder<T> copyWithUrl(Uri url) =>
-      PostgrestTransformBuilder(_copyWith(url: url));
+  PostgrestTransformBuilder<T> copyWithUrl(Uri url) => PostgrestTransformBuilder(_copyWith(url: url));
 
   /// Performs horizontal filtering with SELECT.
   ///
@@ -114,12 +113,9 @@ class PostgrestTransformBuilder<T> extends RawPostgrestBuilder<T, T, T> {
   ///     .select('messages(*)')
   ///     .range(1, 1, referencedTable: 'messages');
   /// ```
-  PostgrestTransformBuilder<T> range(int from, int to,
-      {String? referencedTable}) {
-    final keyOffset =
-        referencedTable == null ? 'offset' : '$referencedTable.offset';
-    final keyLimit =
-        referencedTable == null ? 'limit' : '$referencedTable.limit';
+  PostgrestTransformBuilder<T> range(int from, int to, {String? referencedTable}) {
+    final keyOffset = referencedTable == null ? 'offset' : '$referencedTable.offset';
+    final keyLimit = referencedTable == null ? 'limit' : '$referencedTable.limit';
 
     var url = appendSearchParams(keyOffset, '$from');
     url = appendSearchParams(keyLimit, '${to - from + 1}', url);
@@ -205,8 +201,7 @@ class PostgrestTransformBuilder<T> extends RawPostgrestBuilder<T, T, T> {
   /// final users = res.data;
   /// int count = res.count;
   /// ```
-  ResponsePostgrestBuilder<PostgrestResponse<T>, T, T> count(
-      [CountOption count = CountOption.exact]) {
+  ResponsePostgrestBuilder<PostgrestResponse<T>, T, T> count([CountOption count = CountOption.exact]) {
     return ResponsePostgrestBuilder(
       _copyWithType(count: count),
     );
@@ -232,8 +227,7 @@ class PostgrestTransformBuilder<T> extends RawPostgrestBuilder<T, T, T> {
   ///
   /// https://supabase.com/docs/guides/database/extensions/postgis
   ///
-  ResponsePostgrestBuilder<Map<String, dynamic>, Map<String, dynamic>,
-      Map<String, dynamic>> geojson() {
+  ResponsePostgrestBuilder<Map<String, dynamic>, Map<String, dynamic>, Map<String, dynamic>> geojson() {
     final newHeaders = {..._headers};
     newHeaders['Accept'] = 'application/geo+json;';
     return ResponsePostgrestBuilder(_copyWithType(headers: newHeaders));
@@ -274,8 +268,7 @@ class PostgrestTransformBuilder<T> extends RawPostgrestBuilder<T, T, T> {
     // An Accept header can carry multiple media types but postgrest-js always sends one
     final forMediatype = _headers['Accept'] ?? 'application/json';
     final newHeaders = {..._headers};
-    newHeaders['Accept'] =
-        'application/vnd.pgrst.plan+text; for="$forMediatype"; options=$options;';
+    newHeaders['Accept'] = 'application/vnd.pgrst.plan+text; for="$forMediatype"; options=$options;';
     return _copyWithType(headers: newHeaders);
   }
 }

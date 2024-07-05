@@ -28,8 +28,7 @@ void main() {
   });
   group('Provider sign in', () {
     test('signIn() with Provider', () async {
-      final res =
-          await client.getOAuthSignInUrl(provider: OAuthProvider.google);
+      final res = await client.getOAuthSignInUrl(provider: OAuthProvider.google);
       final url = res.url;
       final provider = res.provider;
       expect(url, startsWith('$gotrueUrl/authorize?provider=google'));
@@ -46,8 +45,7 @@ void main() {
       final provider = res.provider;
       expect(
         url,
-        startsWith(
-            '$gotrueUrl/authorize?provider=github&scopes=repo&redirect_to=redirectToURL'),
+        startsWith('$gotrueUrl/authorize?provider=github&scopes=repo&redirect_to=redirectToURL'),
       );
       expect(provider, OAuthProvider.github);
     });
@@ -55,9 +53,7 @@ void main() {
 
   group('getSessionFromUrl()', () {
     setUp(() async {
-      final res = await http.post(
-          Uri.parse('http://localhost:3000/rpc/reset_and_init_auth_data'),
-          headers: {'x-forwarded-for': '127.0.0.1'});
+      final res = await http.post(Uri.parse('http://localhost:3000/rpc/reset_and_init_auth_data'), headers: {'x-forwarded-for': '127.0.0.1'});
       if (res.body.isNotEmpty) throw res.body;
 
       await client.signInWithPassword(email: email1, password: password);
@@ -72,8 +68,7 @@ void main() {
       const providerToken = 'my_provider_token_with_fragment';
       const providerRefreshToken = 'my_provider_refresh_token';
 
-      final url =
-          'http://my-callback-url.com/welcome#access_token=$accessToken&expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken&provider_refresh_token=$providerRefreshToken';
+      final url = 'http://my-callback-url.com/welcome#access_token=$accessToken&expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken&provider_refresh_token=$providerRefreshToken';
       final res = await client.getSessionFromUrl(Uri.parse(url));
       expect(res.session.accessToken, accessToken);
       expect(res.session.expiresIn, expiresIn);
@@ -91,8 +86,7 @@ void main() {
       const providerToken = 'my_provider_token_fragment_and_query';
       const providerRefreshToken = 'my_provider_refresh_token';
 
-      final url =
-          'http://my-callback-url.com?page=welcome&foo=bar#access_token=$accessToken&expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken&provider_refresh_token=$providerRefreshToken';
+      final url = 'http://my-callback-url.com?page=welcome&foo=bar#access_token=$accessToken&expires_in=$expiresIn&refresh_token=$refreshToken&token_type=$tokenType&provider_token=$providerToken&provider_refresh_token=$providerRefreshToken';
       final res = await client.getSessionFromUrl(Uri.parse(url));
       expect(res.session.accessToken, accessToken);
       expect(res.session.expiresIn, expiresIn);
@@ -105,8 +99,7 @@ void main() {
     test('parse provider callback url with missing param error', () async {
       try {
         final accessToken = session.accessToken;
-        final url =
-            'http://my-callback-url.com?page=welcome&foo=bar#access_token=$accessToken';
+        final url = 'http://my-callback-url.com?page=welcome&foo=bar#access_token=$accessToken';
         await client.getSessionFromUrl(Uri.parse(url));
         fail('Passed provider with missing param');
       } catch (error) {
@@ -118,8 +111,7 @@ void main() {
     test('parse provider callback url with error', () async {
       const errorDesc = 'my_error_description';
       try {
-        const url =
-            'http://my-callback-url.com?page=welcome&foo=bar#error_description=$errorDesc';
+        const url = 'http://my-callback-url.com?page=welcome&foo=bar#error_description=$errorDesc';
         await client.getSessionFromUrl(Uri.parse(url));
         fail('Passed provider with error');
       } on AuthException catch (error) {

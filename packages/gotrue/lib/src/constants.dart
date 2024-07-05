@@ -65,16 +65,7 @@ extension GenerateLinkTypeExtended on GenerateLinkType {
   }
 }
 
-enum OtpType {
-  sms,
-  phoneChange,
-  signup,
-  invite,
-  magiclink,
-  recovery,
-  emailChange,
-  email
-}
+enum OtpType { sms, phoneChange, signup, invite, magiclink, recovery, emailChange, email }
 
 /// Messaging channel to use (e.g. whatsapp or sms)
 enum OtpChannel {

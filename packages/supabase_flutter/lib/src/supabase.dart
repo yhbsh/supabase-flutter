@@ -89,8 +89,7 @@ class Supabase {
     if (authOptions.localStorage == null) {
       authOptions = authOptions.copyWith(
         localStorage: SharedPreferencesLocalStorage(
-          persistSessionKey:
-              "sb-${Uri.parse(url).host.split(".").first}-auth-token",
+          persistSessionKey: "sb-${Uri.parse(url).host.split(".").first}-auth-token",
         ),
       );
     }
@@ -112,8 +111,7 @@ class Supabase {
 
     // Wrap `recoverSession()` in a `CancelableOperation` so that it can be canceled in dispose
     // if still in progress
-    _instance._restoreSessionCancellableOperation =
-        CancelableOperation.fromFuture(
+    _instance._restoreSessionCancellableOperation = CancelableOperation.fromFuture(
       _instance._supabaseAuth.recoverSession(),
     );
 
@@ -155,10 +153,7 @@ class Supabase {
     required StorageClientOptions storageOptions,
     required AuthClientOptions authOptions,
   }) {
-    final headers = {
-      ...Constants.defaultHeaders,
-      if (customHeaders != null) ...customHeaders
-    };
+    final headers = {...Constants.defaultHeaders, if (customHeaders != null) ...customHeaders};
     client = SupabaseClient(
       supabaseUrl,
       supabaseAnonKey,

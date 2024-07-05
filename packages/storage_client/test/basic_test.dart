@@ -18,16 +18,7 @@ Map<String, dynamic> get testBucketJson => {
       'public': false,
     };
 
-Map<String, dynamic> get testFileObjectJson => {
-      'name': 'test_bucket',
-      'id': 'test_bucket',
-      'bucket_id': 'public',
-      'owner': 'owner_id',
-      'updated_at': null,
-      'created_at': null,
-      'last_accessed_at': null,
-      'buckets': testBucketJson
-    };
+Map<String, dynamic> get testFileObjectJson => {'name': 'test_bucket', 'id': 'test_bucket', 'bucket_id': 'public', 'owner': 'owner_id', 'updated_at': null, 'created_at': null, 'last_accessed_at': null, 'buckets': testBucketJson};
 
 String get bucketUrl => '$supabaseUrl/storage/v1/bucket';
 String get objectUrl => '$supabaseUrl/storage/v1/object';
@@ -184,8 +175,7 @@ void main() {
       final file = File('a.txt');
       file.writeAsStringSync('File content');
 
-      final uploadTask =
-          client.from('public').upload('a.txt', file, retryAttempts: 1);
+      final uploadTask = client.from('public').upload('a.txt', file, retryAttempts: 1);
       expect(uploadTask, throwsException);
     });
 
@@ -220,9 +210,7 @@ void main() {
       final file = File('a.txt');
       file.writeAsStringSync('File content');
 
-      final response = await client
-          .from('public')
-          .uploadBinary('a.txt', file.readAsBytesSync());
+      final response = await client.from('public').uploadBinary('a.txt', file.readAsBytesSync());
       expect(response, isA<String>());
       expect(response.endsWith('/a.txt'), isTrue);
     });
@@ -239,9 +227,7 @@ void main() {
       final file = File('a.txt');
       file.writeAsStringSync('File content');
 
-      final response = await client
-          .from('public')
-          .updateBinary('a.txt', file.readAsBytesSync());
+      final response = await client.from('public').updateBinary('a.txt', file.readAsBytesSync());
       expect(response, isA<String>());
       expect(response.endsWith('/a.txt'), isTrue);
     });
@@ -280,10 +266,7 @@ void main() {
     });
 
     test('X-Client-Info header can be overridden', () {
-      client = SupabaseStorageClient('$supabaseUrl/storage/v1', {
-        'Authorization': 'Bearer $supabaseKey',
-        'X-Client-Info': 'supabase-dart/0.0.0'
-      });
+      client = SupabaseStorageClient('$supabaseUrl/storage/v1', {'Authorization': 'Bearer $supabaseKey', 'X-Client-Info': 'supabase-dart/0.0.0'});
 
       expect(client.headers['X-Client-Info'], 'supabase-dart/0.0.0');
     });

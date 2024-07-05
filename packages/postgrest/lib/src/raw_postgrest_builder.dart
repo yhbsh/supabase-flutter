@@ -51,8 +51,7 @@ class RawPostgrestBuilder<T, S, R> extends PostgrestBuilder<T, S, R> {
   ///       (users) => users.map(User.fromJson).toList(),
   ///     );
   /// ```
-  PostgrestBuilder<U, U, R> withConverter<U>(
-      PostgrestConverter<U, R> converter) {
+  PostgrestBuilder<U, U, R> withConverter<U>(PostgrestConverter<U, R> converter) {
     return PostgrestBuilder(
       url: _url,
       headers: _headers,

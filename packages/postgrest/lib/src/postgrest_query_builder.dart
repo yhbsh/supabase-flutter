@@ -147,8 +147,7 @@ class PostgrestQueryBuilder<T> extends RawPostgrestBuilder<T, T, T> {
     bool defaultToNull = true,
   }) {
     final newHeaders = {..._headers};
-    newHeaders['Prefer'] =
-        'resolution=${ignoreDuplicates ? 'ignore' : 'merge'}-duplicates';
+    newHeaders['Prefer'] = 'resolution=${ignoreDuplicates ? 'ignore' : 'merge'}-duplicates';
 
     if (!defaultToNull) {
       newHeaders['Prefer'] = '${newHeaders['Prefer']!},missing=default';
@@ -237,8 +236,7 @@ class PostgrestQueryBuilder<T> extends RawPostgrestBuilder<T, T, T> {
 
   Uri _setColumnsSearchParam(List values) {
     final newValues = PostgrestList.from(values);
-    final columns = newValues.fold<List<String>>(
-        [], (value, element) => value..addAll(element.keys));
+    final columns = newValues.fold<List<String>>([], (value, element) => value..addAll(element.keys));
     if (newValues.isNotEmpty) {
       final uniqueColumns = {...columns}.map((e) => '"$e"').join(',');
       return appendSearchParams("columns", uniqueColumns);

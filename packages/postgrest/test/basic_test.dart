@@ -95,8 +95,7 @@ void main() {
 
     test('query non-public schema dynamically', () async {
       final postgrest = PostgrestClient(rootUrl);
-      final personalData =
-          await postgrest.schema('personal').from('users').select();
+      final personalData = await postgrest.schema('personal').from('users').select();
       expect(personalData.length, 5);
 
       // confirm that the client defaults to its initialized schema by default.
@@ -117,12 +116,7 @@ void main() {
 
     test('upsert', () async {
       final headersBefore = {...postgrest.headers};
-      final res = await postgrest.from('messages').upsert({
-        'id': 3,
-        'message': 'foo',
-        'username': 'supabot',
-        'channel_id': 2
-      }).select();
+      final res = await postgrest.from('messages').upsert({'id': 3, 'message': 'foo', 'username': 'supabot', 'channel_id': 2}).select();
       final headersAfter = {...postgrest.headers};
 
       expect(headersBefore, headersAfter);
@@ -233,26 +227,12 @@ void main() {
     });
 
     test('basic delete', () async {
-      final res = await postgrest
-          .from('messages')
-          .delete()
-          .eq('message', 'Supabase Launch Week is on fire')
-          .select();
+      final res = await postgrest.from('messages').delete().eq('message', 'Supabase Launch Week is on fire').select();
       expect(res, [
-        {
-          'id': 3,
-          'data': null,
-          'message': 'Supabase Launch Week is on fire',
-          'username': 'supabot',
-          'channel_id': 1,
-          'inserted_at': '2021-06-20T04:28:21.598+00:00'
-        }
+        {'id': 3, 'data': null, 'message': 'Supabase Launch Week is on fire', 'username': 'supabot', 'channel_id': 1, 'inserted_at': '2021-06-20T04:28:21.598+00:00'}
       ]);
 
-      final resMsg = await postgrest
-          .from('messages')
-          .select()
-          .eq('message', 'Supabase Launch Week is on fire');
+      final resMsg = await postgrest.from('messages').select().eq('message', 'Supabase Launch Week is on fire');
       expect(resMsg, isEmpty);
     });
 
@@ -284,10 +264,7 @@ void main() {
     });
 
     test('count with head: true, filters', () async {
-      final int count = await postgrest
-          .from('users')
-          .count(CountOption.exact)
-          .eq('status', 'ONLINE');
+      final int count = await postgrest.from('users').count(CountOption.exact).eq('status', 'ONLINE');
       expect(count, 3);
     });
 
@@ -297,15 +274,13 @@ void main() {
     });
 
     test('select with count: planned', () async {
-      final res =
-          await postgrest.from('users').select('*').count(CountOption.planned);
+      final res = await postgrest.from('users').select('*').count(CountOption.planned);
       final int count = res.count;
       expect(count, isNotNull);
     });
 
     test('select with head:true, count: estimated', () async {
-      final int res =
-          await postgrest.from('users').count(CountOption.estimated);
+      final int res = await postgrest.from('users').count(CountOption.estimated);
       expect(res, isA<int>());
     });
 
@@ -347,12 +322,7 @@ void main() {
     });
 
     test('delete with count: exact', () async {
-      final res = await postgrest
-          .from('users')
-          .delete()
-          .eq('username', 'kiwicopple')
-          .select()
-          .count(CountOption.exact);
+      final res = await postgrest.from('users').delete().eq('username', 'kiwicopple').select().count(CountOption.exact);
 
       expect(res.count, 1);
     });
@@ -382,20 +352,12 @@ void main() {
     });
 
     test('delete from uppercase table name', () async {
-      final res = await postgrest
-          .from('TestTable')
-          .delete()
-          .eq('slug', 'new slug')
-          .select()
-          .count(CountOption.exact);
+      final res = await postgrest.from('TestTable').delete().eq('slug', 'new slug').select().count(CountOption.exact);
       expect(res.count, 1);
     });
 
     test('withConverter', () async {
-      final res = await postgrest
-          .from('users')
-          .select()
-          .withConverter((data) => [data]);
+      final res = await postgrest.from('users').select().withConverter((data) => [data]);
       expect(res, isNotNull);
       expect(res, isNotEmpty);
       expect(res.first, isNotEmpty);
@@ -403,11 +365,7 @@ void main() {
     });
 
     test('withConverter and count', () async {
-      final res = await postgrest
-          .from('users')
-          .select()
-          .count(CountOption.exact)
-          .withConverter((data) => [data]);
+      final res = await postgrest.from('users').select().count(CountOption.exact).withConverter((data) => [data]);
       expect(res.data.first, isNotEmpty);
       expect(res.data.first, isA<List>());
       expect(res.count, greaterThan(3));
@@ -435,10 +393,7 @@ void main() {
     });
     test('basic select table with converter', () async {
       try {
-        await postgrestCustomHttpClient
-            .from('users')
-            .select()
-            .withConverter((data) => data);
+        await postgrestCustomHttpClient.from('users').select().withConverter((data) => data);
         fail('Table was able to be selected, even tho it does not exist');
       } on PostgrestException catch (error) {
         expect(error.code, '420');
@@ -446,10 +401,8 @@ void main() {
     });
     test('basic stored procedure call', () async {
       try {
-        await postgrestCustomHttpClient
-            .rpc<String>('get_status', params: {'name_param': 'supabot'});
-        fail(
-            'Stored procedure was able to be called, even tho it does not exist');
+        await postgrestCustomHttpClient.rpc<String>('get_status', params: {'name_param': 'supabot'});
+        fail('Stored procedure was able to be called, even tho it does not exist');
       } on PostgrestException catch (error) {
         expect(error.code, '420');
       }

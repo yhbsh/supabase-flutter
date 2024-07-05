@@ -25,9 +25,7 @@ class StorageFileApi {
   }
 
   String _removeEmptyFolders(String path) {
-    return path
-        .replaceAll(RegExp(r'/^\/|\/$/g'), '')
-        .replaceAll(RegExp(r'/\/+/g'), '/');
+    return path.replaceAll(RegExp(r'/^\/|\/$/g'), '').replaceAll(RegExp(r'/\/+/g'), '/');
   }
 
   /// Uploads a file to an existing bucket.
@@ -50,8 +48,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   }) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
     final finalPath = _getFinalPath(path);
     final response = await _storageFetch.postFile(
       '$url/object/$finalPath',
@@ -85,8 +82,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   }) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
     final finalPath = _getFinalPath(path);
     final response = await _storageFetch.postBinaryFile(
       '$url/object/$finalPath',
@@ -115,8 +111,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   ]) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
 
     final cleanPath = _removeEmptyFolders(path);
     final finalPath = _getFinalPath(cleanPath);
@@ -149,8 +144,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   ]) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
 
     final cleanPath = _removeEmptyFolders(path);
     final path0 = _getFinalPath(cleanPath);
@@ -219,8 +213,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   }) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
     final finalPath = _getFinalPath(path);
     final response = await _storageFetch.putFile(
       '$url/object/$finalPath',
@@ -255,8 +248,7 @@ class StorageFileApi {
     int? retryAttempts,
     StorageRetryController? retryController,
   }) async {
-    assert(retryAttempts == null || retryAttempts >= 0,
-        'retryAttempts has to be greater or equal to 0');
+    assert(retryAttempts == null || retryAttempts >= 0, 'retryAttempts has to be greater or equal to 0');
     final finalPath = _getFinalPath(path);
     final response = await _storageFetch.putBinaryFile(
       '$url/object/$finalPath',
@@ -384,16 +376,14 @@ class StorageFileApi {
   Future<Uint8List> download(String path, {TransformOptions? transform}) async {
     final wantsTransformations = transform != null;
     final finalPath = _getFinalPath(path);
-    final renderPath =
-        wantsTransformations ? 'render/image/authenticated' : 'object';
+    final renderPath = wantsTransformations ? 'render/image/authenticated' : 'object';
     final queryParams = transform?.toQueryParams;
     final options = FetchOptions(headers: headers, noResolveJson: true);
 
     var fetchUrl = Uri.parse('$url/$renderPath/$finalPath');
     fetchUrl = fetchUrl.replace(queryParameters: queryParams);
 
-    final response =
-        await _storageFetch.get(fetchUrl.toString(), options: options);
+    final response = await _storageFetch.get(fetchUrl.toString(), options: options);
     return response as Uint8List;
   }
 

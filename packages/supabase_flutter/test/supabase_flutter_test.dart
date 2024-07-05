@@ -65,8 +65,7 @@ void main() {
       // Give it a delay to wait for recoverSession to throw
       await Future.delayed(const Duration(milliseconds: 10));
 
-      await expectLater(Supabase.instance.client.auth.onAuthStateChange,
-          emitsError(isA<AuthException>()));
+      await expectLater(Supabase.instance.client.auth.onAuthStateChange, emitsError(isA<AuthException>()));
     });
   });
 
@@ -107,17 +106,12 @@ void main() {
         httpClient: pkceHttpClient,
         authOptions: FlutterAuthClientOptions(
           localStorage: MockEmptyLocalStorage(),
-          pkceAsyncStorage: MockAsyncStorage()
-            ..setItem(
-                key: 'supabase.auth.token-code-verifier',
-                value: 'raw-code-verifier'),
+          pkceAsyncStorage: MockAsyncStorage()..setItem(key: 'supabase.auth.token-code-verifier', value: 'raw-code-verifier'),
         ),
       );
     });
 
-    test(
-        'Having `code` as the query parameter triggers `getSessionFromUrl` call on initialize',
-        () async {
+    test('Having `code` as the query parameter triggers `getSessionFromUrl` call on initialize', () async {
       expect(pkceHttpClient.requestCount, 1);
       expect(pkceHttpClient.lastRequestBody['auth_code'], 'my-code-verifier');
     });

@@ -228,8 +228,7 @@ class SupabaseStreamBuilder extends Stream<SupabaseStreamEvent> {
     }
     PostgrestTransformBuilder? transformQuery;
     if (_orderBy != null) {
-      transformQuery =
-          query.order(_orderBy!.column, ascending: _orderBy!.ascending);
+      transformQuery = query.order(_orderBy!.column, ascending: _orderBy!.ascending);
     }
     if (_limit != null) {
       transformQuery = (transformQuery ?? query).limit(_limit!);
@@ -255,8 +254,7 @@ class SupabaseStreamBuilder extends Stream<SupabaseStreamEvent> {
     } else if (payload.eventType == PostgresChangeEvent.delete) {
       targetRecord = payload.oldRecord;
     }
-    return _uniqueColumns
-        .every((column) => record[column] == targetRecord[column]);
+    return _uniqueColumns.every((column) => record[column] == targetRecord[column]);
   }
 
   void _sortData() {
@@ -281,8 +279,7 @@ class SupabaseStreamBuilder extends Stream<SupabaseStreamEvent> {
       _sortData();
     }
     if (!(_streamController?.isClosed ?? true)) {
-      final emitData =
-          (_limit != null ? _streamData.take(_limit!) : _streamData).toList();
+      final emitData = (_limit != null ? _streamData.take(_limit!) : _streamData).toList();
       _streamController!.add(emitData);
     }
   }
@@ -298,8 +295,7 @@ class SupabaseStreamBuilder extends Stream<SupabaseStreamEvent> {
   bool get isBroadcast => true;
 
   @override
-  Stream<E> asyncMap<E>(
-      FutureOr<E> Function(SupabaseStreamEvent event) convert) {
+  Stream<E> asyncMap<E>(FutureOr<E> Function(SupabaseStreamEvent event) convert) {
     // Copied from [Stream.asyncMap]
 
     final controller = BehaviorSubject<E>();
@@ -340,8 +336,7 @@ class SupabaseStreamBuilder extends Stream<SupabaseStreamEvent> {
   }
 
   @override
-  Stream<E> asyncExpand<E>(
-      Stream<E>? Function(SupabaseStreamEvent event) convert) {
+  Stream<E> asyncExpand<E>(Stream<E>? Function(SupabaseStreamEvent event) convert) {
     //Copied from [Stream.asyncExpand]
     final controller = BehaviorSubject<E>();
     controller.onListen = () {

@@ -18,8 +18,7 @@ class YAJsonIsolate {
   ///
   /// This method is called automatically when the first method is called. Manually initializing before first json de/encode can improve performance.
   Future<void> initialize() async {
-    assert(_hasStartedInitialize == false,
-        'initialize() can only be called once per isolate.');
+    assert(_hasStartedInitialize == false, 'initialize() can only be called once per isolate.');
     _hasStartedInitialize = true;
     await Isolate.spawn(
       _compute,

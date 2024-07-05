@@ -175,10 +175,7 @@ class _ProfileFormState extends State<_ProfileForm> {
   Future<void> _loadProfile() async {
     try {
       final userId = Supabase.instance.client.auth.currentUser!.id;
-      final data = (await Supabase.instance.client
-          .from('profiles')
-          .select()
-          .match({'id': userId}).maybeSingle());
+      final data = (await Supabase.instance.client.from('profiles').select().match({'id': userId}).maybeSingle());
       if (data != null) {
         setState(() {
           _usernameController.text = data['username'];
@@ -223,8 +220,7 @@ class _ProfileFormState extends State<_ProfileForm> {
                       setState(() {
                         _loading = true;
                       });
-                      final userId =
-                          Supabase.instance.client.auth.currentUser!.id;
+                      final userId = Supabase.instance.client.auth.currentUser!.id;
                       final username = _usernameController.text;
                       final website = _websiteController.text;
                       await Supabase.instance.client.from('profiles').upsert({
@@ -233,8 +229,7 @@ class _ProfileFormState extends State<_ProfileForm> {
                         'website': website,
                       });
                       if (mounted) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Saved profile'),
                         ));
                       }
@@ -250,9 +245,7 @@ class _ProfileFormState extends State<_ProfileForm> {
                   },
                   child: const Text('Save')),
               const SizedBox(height: 16),
-              TextButton(
-                  onPressed: () => Supabase.instance.client.auth.signOut(),
-                  child: const Text('Sign Out')),
+              TextButton(onPressed: () => Supabase.instance.client.auth.signOut(), child: const Text('Sign Out')),
             ],
           );
   }

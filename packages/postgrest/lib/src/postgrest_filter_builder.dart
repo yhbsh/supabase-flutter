@@ -4,8 +4,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   PostgrestFilterBuilder(PostgrestBuilder<T, T, T> builder) : super(builder);
 
   @override
-  PostgrestFilterBuilder<T> copyWithUrl(Uri url) =>
-      PostgrestFilterBuilder(_copyWith(url: url));
+  PostgrestFilterBuilder<T> copyWithUrl(Uri url) => PostgrestFilterBuilder(_copyWith(url: url));
 
   /// Convert list filter to query params string
   String _cleanFilterArray(List filter) {
@@ -165,8 +164,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   ///     .likeAllOf('username', ['%supa%', '%bot%']);
   /// ```
   PostgrestFilterBuilder likeAllOf(String column, List<String> patterns) {
-    return copyWithUrl(
-        appendSearchParams(column, 'like(all).{${patterns.join(',')}}'));
+    return copyWithUrl(appendSearchParams(column, 'like(all).{${patterns.join(',')}}'));
   }
 
   /// Match only rows where [column] matches any of [patterns] case-sensitively.
@@ -178,8 +176,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   ///     .likeAnyOf('username', ['%supa%', '%bot%']);
   /// ```
   PostgrestFilterBuilder likeAnyOf(String column, List<String> patterns) {
-    return copyWithUrl(
-        appendSearchParams(column, 'like(any).{${patterns.join(',')}}'));
+    return copyWithUrl(appendSearchParams(column, 'like(any).{${patterns.join(',')}}'));
   }
 
   /// Finds all rows whose value in the stated [column] matches the supplied [pattern] (case insensitive).
@@ -203,8 +200,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   ///     .ilikeAllOf('username', ['%supa%', '%bot%']);
   /// ```
   PostgrestFilterBuilder ilikeAllOf(String column, List<String> patterns) {
-    return copyWithUrl(
-        appendSearchParams(column, 'ilike(all).{${patterns.join(',')}}'));
+    return copyWithUrl(appendSearchParams(column, 'ilike(all).{${patterns.join(',')}}'));
   }
 
   /// Match only rows where [column] matches any of [patterns] case-insensitively.
@@ -216,8 +212,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   ///     .ilikeAnyOf('username', ['%supa%', '%bot%']);
   /// ```
   PostgrestFilterBuilder ilikeAnyOf(String column, List<String> patterns) {
-    return copyWithUrl(
-        appendSearchParams(column, 'ilike(any).{${patterns.join(',')}}'));
+    return copyWithUrl(appendSearchParams(column, 'ilike(any).{${patterns.join(',')}}'));
   }
 
   /// A check for exact equality (null, true, false)
@@ -244,8 +239,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   /// ```
   // ignore: non_constant_identifier_names
   PostgrestFilterBuilder<T> inFilter(String column, List values) {
-    return copyWithUrl(
-        appendSearchParams(column, 'in.(${_cleanFilterArray(values)})'));
+    return copyWithUrl(appendSearchParams(column, 'in.(${_cleanFilterArray(values)})'));
   }
 
   /// Finds all rows whose json, array, or range value on the stated [column] contains the values specified in [value].
@@ -437,8 +431,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
       typePart = 'w';
     }
     final configPart = config == null ? '' : '($config)';
-    return copyWithUrl(
-        appendSearchParams(column, '${typePart}fts$configPart.$query'));
+    return copyWithUrl(appendSearchParams(column, '${typePart}fts$configPart.$query'));
   }
 
   /// Finds all rows whose [column] satisfies the filter.
@@ -449,8 +442,7 @@ class PostgrestFilterBuilder<T> extends PostgrestTransformBuilder<T> {
   ///     .select()
   ///     .filter('username', 'eq', 'supabot');
   /// ```
-  PostgrestFilterBuilder<T> filter(
-      String column, String operator, Object? value) {
+  PostgrestFilterBuilder<T> filter(String column, String operator, Object? value) {
     final Uri url;
     if (value is List) {
       if (operator == "in") {

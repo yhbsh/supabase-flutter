@@ -38,8 +38,7 @@ class RealtimeChannel {
     RealtimeChannelConfig params = const RealtimeChannelConfig(),
   })  : _timeout = socket.timeout,
         params = params.toMap(),
-        subTopic = topic.replaceFirst(
-            RegExp(r"^realtime:", caseSensitive: false), "") {
+        subTopic = topic.replaceFirst(RegExp(r"^realtime:", caseSensitive: false), "") {
     broadcastEndpointURL = _broadcastEndpointURL;
 
     joinPush = Push(
@@ -48,8 +47,7 @@ class RealtimeChannel {
       this.params,
       _timeout,
     );
-    _rejoinTimer =
-        RetryTimer(() => rejoinUntilConnected(), socket.reconnectAfterMs);
+    _rejoinTimer = RetryTimer(() => rejoinUntilConnected(), socket.reconnectAfterMs);
     joinPush.receive('ok', (_) {
       _state = ChannelStates.joined;
       _rejoinTimer.reset();
@@ -84,8 +82,7 @@ class RealtimeChannel {
       _rejoinTimer.scheduleTimeout();
     });
 
-    onEvents(ChannelEvents.reply.eventName(), ChannelFilter(), (payload,
-        [ref]) {
+    onEvents(ChannelEvents.reply.eventName(), ChannelFilter(), (payload, [ref]) {
       trigger(replyEventName(ref), payload);
     });
 
@@ -129,8 +126,7 @@ class RealtimeChannel {
       final config = <String, dynamic>{
         'broadcast': broadcast,
         'presence': presence,
-        'postgres_changes':
-            _bindings['postgres_changes']?.map((r) => r.filter).toList() ?? [],
+        'postgres_changes': _bindings['postgres_changes']?.map((r) => r.filter).toList() ?? [],
       };
 
       if (socket.accessToken != null) {
@@ -167,11 +163,7 @@ class RealtimeChannel {
               final filter = clientPostgresBinding.filter['filter'];
               final serverPostgresFilter = serverPostgresFilters[i];
 
-              if (serverPostgresFilter != null &&
-                  serverPostgresFilter['event'] == event &&
-                  serverPostgresFilter['schema'] == schema &&
-                  serverPostgresFilter['table'] == table &&
-                  serverPostgresFilter['filter'] == filter) {
+              if (serverPostgresFilter != null && serverPostgresFilter['event'] == event && serverPostgresFilter['schema'] == schema && serverPostgresFilter['table'] == table && serverPostgresFilter['filter'] == filter) {
                 newPostgresBindings.add(clientPostgresBinding.copyWith(
                   id: serverPostgresFilter['id']?.toString(),
                 ));
@@ -180,8 +172,7 @@ class RealtimeChannel {
                 if (callback != null) {
                   callback(
                     RealtimeSubscribeStatus.channelError,
-                    Exception(
-                        'mismatch between server and client bindings for postgres changes'),
+                    Exception('mismatch between server and client bindings for postgres changes'),
                   );
                 }
                 return;
@@ -201,9 +192,7 @@ class RealtimeChannel {
           callback(
             RealtimeSubscribeStatus.channelError,
             Exception(
-              jsonEncode((error as Map<String, dynamic>).isNotEmpty
-                  ? (error).values.join(', ')
-                  : 'error'),
+              jsonEncode((error as Map<String, dynamic>).isNotEmpty ? (error).values.join(', ') : 'error'),
             ),
           );
         }
@@ -217,14 +206,10 @@ class RealtimeChannel {
   }
 
   List<SinglePresenceState> presenceState() {
-    return presence.state.entries
-        .map((entry) =>
-            SinglePresenceState(key: entry.key, presences: entry.value))
-        .toList();
+    return presence.state.entries.map((entry) => SinglePresenceState(key: entry.key, presences: entry.value)).toList();
   }
 
-  Future<ChannelResponse> track(Map<String, dynamic> payload,
-      [Map<String, dynamic> opts = const {}]) {
+  Future<ChannelResponse> track(Map<String, dynamic> payload, [Map<String, dynamic> opts = const {}]) {
     return send(
       type: RealtimeListenTypes.presence,
       payload: {
@@ -249,14 +234,12 @@ class RealtimeChannel {
 
   /// Registers a callback that will be executed when the channel closes.
   void _onClose(Function callback) {
-    onEvents(ChannelEvents.close.eventName(), ChannelFilter(),
-        (reason, [ref]) => callback());
+    onEvents(ChannelEvents.close.eventName(), ChannelFilter(), (reason, [ref]) => callback());
   }
 
   /// Registers a callback that will be executed when the channel encounteres an error.
   void _onError(void Function(String?) callback) {
-    onEvents(ChannelEvents.error.eventName(), ChannelFilter(),
-        (reason, [ref]) => callback(reason?.toString()));
+    onEvents(ChannelEvents.error.eventName(), ChannelFilter(), (reason, [ref]) => callback(reason?.toString()));
   }
 
   /// Sets up a listener on your Supabase database.
@@ -346,8 +329,7 @@ class RealtimeChannel {
         event: PresenceEvent.sync.name,
       ),
       (payload, [ref]) {
-        callback(RealtimePresenceSyncPayload.fromJson(
-            Map<String, dynamic>.from(payload)));
+        callback(RealtimePresenceSyncPayload.fromJson(Map<String, dynamic>.from(payload)));
       },
     );
   }
@@ -372,8 +354,7 @@ class RealtimeChannel {
         event: PresenceEvent.join.name,
       ),
       (payload, [ref]) {
-        callback(RealtimePresenceJoinPayload.fromJson(
-            Map<String, dynamic>.from(payload)));
+        callback(RealtimePresenceJoinPayload.fromJson(Map<String, dynamic>.from(payload)));
       },
     );
   }
@@ -398,15 +379,13 @@ class RealtimeChannel {
         event: PresenceEvent.leave.name,
       ),
       (payload, [ref]) {
-        callback(RealtimePresenceLeavePayload.fromJson(
-            Map<String, dynamic>.from(payload)));
+        callback(RealtimePresenceLeavePayload.fromJson(Map<String, dynamic>.from(payload)));
       },
     );
   }
 
   @internal
-  RealtimeChannel onEvents(
-      String type, ChannelFilter filter, BindingCallback callback) {
+  RealtimeChannel onEvents(String type, ChannelFilter filter, BindingCallback callback) {
     final typeLower = type.toLowerCase();
 
     final binding = Binding(typeLower, filter.toMap(), callback);
@@ -425,8 +404,7 @@ class RealtimeChannel {
     final typeLower = type.toLowerCase();
 
     _bindings[typeLower] = _bindings[typeLower]!.where((bind) {
-      return !(bind.type.toLowerCase() == typeLower &&
-          RealtimeChannel._isEqual(bind.filter, filter));
+      return !(bind.type.toLowerCase() == typeLower && RealtimeChannel._isEqual(bind.filter, filter));
     }).toList();
     return this;
   }
@@ -514,9 +492,7 @@ class RealtimeChannel {
         opts['timeout'] ?? _timeout,
       );
 
-      if (payload['type'] == 'broadcast' &&
-          (params['config']?['broadcast']?['ack'] == null ||
-              params['config']?['broadcast']?['ack'] == false)) {
+      if (payload['type'] == 'broadcast' && (params['config']?['broadcast']?['ack'] == null || params['config']?['broadcast']?['ack'] == false)) {
         if (!completer.isCompleted) {
           completer.complete(ChannelResponse.ok);
         }
@@ -599,8 +575,7 @@ class RealtimeChannel {
     var url = socket.endPoint;
     url = url.replaceFirst(RegExp(r'^ws', caseSensitive: false), 'http');
     url = url.replaceAll(
-      RegExp(r'(/socket/websocket|/socket|/websocket)/?$',
-          caseSensitive: false),
+      RegExp(r'(/socket/websocket|/socket|/websocket)/?$', caseSensitive: false),
       '',
     );
     url = '${url.replaceAll(RegExp(r'/+$'), '')}/api/broadcast';
@@ -655,8 +630,7 @@ class RealtimeChannel {
 
     if (['insert', 'update', 'delete'].contains(typeLower)) {
       final bindings = _bindings['postgres_changes']?.where((bind) {
-        return (bind.filter['event'] == '*' ||
-            bind.filter['event']?.toLowerCase() == typeLower);
+        return (bind.filter['event'] == '*' || bind.filter['event']?.toLowerCase() == typeLower);
       });
 
       for (final bind in (bindings ?? <Binding>[])) {
@@ -670,23 +644,17 @@ class RealtimeChannel {
           if (bindId != null) {
             final bindEvent = bind.filter['event'];
 
-            return ((payload['ids'] as List?)?.contains(int.parse(bindId)) ==
-                    true &&
-                (bindEvent == '*' ||
-                    bindEvent?.toLowerCase() ==
-                        (payload['data']?['type'] as String?)?.toLowerCase()));
+            return ((payload['ids'] as List?)?.contains(int.parse(bindId)) == true && (bindEvent == '*' || bindEvent?.toLowerCase() == (payload['data']?['type'] as String?)?.toLowerCase()));
           } else {
             final bindEvent = bind.filter['event']?.toLowerCase();
-            return (bindEvent == '*' ||
-                bindEvent == (payload?['event'] as String?)?.toLowerCase());
+            return (bindEvent == '*' || bindEvent == (payload?['event'] as String?)?.toLowerCase());
           }
         } else {
           return bind.type.toLowerCase() == typeLower;
         }
       });
       for (final bind in bindings) {
-        if (handledPayload is Map<String, dynamic> &&
-            handledPayload.keys.contains('ids')) {
+        if (handledPayload is Map<String, dynamic> && handledPayload.keys.contains('ids')) {
           handledPayload = getEnrichedPayload(handledPayload);
         }
 

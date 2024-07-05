@@ -80,13 +80,8 @@ class User {
       lastSignInAt: json['last_sign_in_at'],
       role: json['role'],
       updatedAt: json['updated_at'],
-      identities: json['identities'] != null
-          ? List<UserIdentity>.from(
-              json['identities']?.map((x) => UserIdentity.fromMap(x)))
-          : null,
-      factors: json['factors'] != null
-          ? List<Factor>.from(json['factors']?.map((x) => Factor.fromJson(x)))
-          : null,
+      identities: json['identities'] != null ? List<UserIdentity>.from(json['identities']?.map((x) => UserIdentity.fromMap(x))) : null,
+      factors: json['factors'] != null ? List<Factor>.from(json['factors']?.map((x) => Factor.fromJson(x))) : null,
       isAnonymous: json['is_anonymous'] ?? false,
     );
   }
@@ -259,26 +254,11 @@ class UserIdentity {
     if (identical(this, other)) return true;
     final mapEquals = const DeepCollectionEquality().equals;
 
-    return other is UserIdentity &&
-        other.id == id &&
-        other.userId == userId &&
-        mapEquals(other.identityData, identityData) &&
-        other.identityId == identityId &&
-        other.provider == provider &&
-        other.createdAt == createdAt &&
-        other.lastSignInAt == lastSignInAt &&
-        other.updatedAt == updatedAt;
+    return other is UserIdentity && other.id == id && other.userId == userId && mapEquals(other.identityData, identityData) && other.identityId == identityId && other.provider == provider && other.createdAt == createdAt && other.lastSignInAt == lastSignInAt && other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        userId.hashCode ^
-        identityData.hashCode ^
-        identityId.hashCode ^
-        provider.hashCode ^
-        createdAt.hashCode ^
-        lastSignInAt.hashCode ^
-        updatedAt.hashCode;
+    return id.hashCode ^ userId.hashCode ^ identityData.hashCode ^ identityId.hashCode ^ provider.hashCode ^ createdAt.hashCode ^ lastSignInAt.hashCode ^ updatedAt.hashCode;
   }
 }

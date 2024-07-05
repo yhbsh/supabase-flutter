@@ -29,8 +29,7 @@ class ResponsePostgrestBuilder<T, S, R> extends PostgrestBuilder<T, S, R> {
   /// List<User> users = res.data;
   /// int count = res.count;
   /// ```
-  PostgrestBuilder<PostgrestResponse<U>, U, R> withConverter<U>(
-      PostgrestConverter<U, R> converter) {
+  PostgrestBuilder<PostgrestResponse<U>, U, R> withConverter<U>(PostgrestConverter<U, R> converter) {
     return PostgrestBuilder(
       url: _url,
       headers: _headers,

@@ -28,13 +28,11 @@ Future<void> main() async {
   // Upload file to bucket "public"
   final file = File('example.txt');
   file.writeAsStringSync('File content');
-  final storageResponse =
-      await client.from('public').upload('example.txt', file);
+  final storageResponse = await client.from('public').upload('example.txt', file);
   print('upload response : $storageResponse');
 
   // Get download url
-  final urlResponse =
-      await client.from('public').createSignedUrl('example.txt', 60);
+  final urlResponse = await client.from('public').createSignedUrl('example.txt', 60);
   print('download url : $urlResponse');
 
   // Download text file

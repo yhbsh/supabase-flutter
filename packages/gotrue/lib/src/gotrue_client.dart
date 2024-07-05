@@ -57,8 +57,7 @@ class GoTrueClient {
   Completer<AuthResponse>? _refreshTokenCompleter;
 
   final _onAuthStateChangeController = BehaviorSubject<AuthState>();
-  final _onAuthStateChangeControllerSync =
-      BehaviorSubject<AuthState>(sync: true);
+  final _onAuthStateChangeControllerSync = BehaviorSubject<AuthState>(sync: true);
 
   /// Local storage to store pkce code verifiers.
   final GotrueAsyncStorage? _asyncStorage;
@@ -74,13 +73,11 @@ class GoTrueClient {
   ///   }
   /// });
   /// ```
-  Stream<AuthState> get onAuthStateChange =>
-      _onAuthStateChangeController.stream;
+  Stream<AuthState> get onAuthStateChange => _onAuthStateChangeController.stream;
 
   /// Don't use this, it's for internal use only.
   @internal
-  Stream<AuthState> get onAuthStateChangeSync =>
-      _onAuthStateChangeControllerSync.stream;
+  Stream<AuthState> get onAuthStateChangeSync => _onAuthStateChangeControllerSync.stream;
 
   final AuthFlowType _flowType;
 
@@ -189,8 +186,7 @@ class GoTrueClient {
     String? captchaToken,
     OtpChannel channel = OtpChannel.sms,
   }) async {
-    assert((email != null && phone == null) || (email == null && phone != null),
-        'You must provide either an email or phone number');
+    assert((email != null && phone == null) || (email == null && phone != null), 'You must provide either an email or phone number');
 
     late final Map<String, dynamic> response;
 
@@ -198,12 +194,9 @@ class GoTrueClient {
       String? codeChallenge;
 
       if (_flowType == AuthFlowType.pkce) {
-        assert(_asyncStorage != null,
-            'You need to provide asyncStorage to perform pkce flow.');
+        assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
         final codeVerifier = generatePKCEVerifier();
-        await _asyncStorage!.setItem(
-            key: '${Constants.defaultStorageKey}-code-verifier',
-            value: codeVerifier);
+        await _asyncStorage!.setItem(key: '${Constants.defaultStorageKey}-code-verifier', value: codeVerifier);
         codeChallenge = generatePKCEChallenge(codeVerifier);
       }
 
@@ -232,11 +225,9 @@ class GoTrueClient {
         'channel': channel.name,
       };
       final fetchOptions = GotrueRequestOptions(headers: _headers, body: body);
-      response = await _fetch.request('$_url/signup', RequestMethodType.post,
-          options: fetchOptions) as Map<String, dynamic>;
+      response = await _fetch.request('$_url/signup', RequestMethodType.post, options: fetchOptions) as Map<String, dynamic>;
     } else {
-      throw AuthException(
-          'You must provide either an email or phone number and a password');
+      throw AuthException('You must provide either an email or phone number and a password');
     }
 
     final authResponse = AuthResponse.fromJson(response);
@@ -320,11 +311,9 @@ class GoTrueClient {
 
   /// Verifies the PKCE code verifyer and retrieves a session.
   Future<AuthSessionUrlResponse> exchangeCodeForSession(String authCode) async {
-    assert(_asyncStorage != null,
-        'You need to provide asyncStorage to perform pkce flow.');
+    assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
 
-    final codeVerifierRawString = await _asyncStorage!
-        .getItem(key: '${Constants.defaultStorageKey}-code-verifier');
+    final codeVerifierRawString = await _asyncStorage!.getItem(key: '${Constants.defaultStorageKey}-code-verifier');
     if (codeVerifierRawString == null) {
       throw AuthException('Code verifier could not be found in local storage.');
     }
@@ -347,11 +336,9 @@ class GoTrueClient {
       ),
     );
 
-    await _asyncStorage!
-        .removeItem(key: '${Constants.defaultStorageKey}-code-verifier');
+    await _asyncStorage!.removeItem(key: '${Constants.defaultStorageKey}-code-verifier');
 
-    final authSessionUrlResponse = AuthSessionUrlResponse(
-        session: Session.fromJson(response)!, redirectType: redirectType?.name);
+    final authSessionUrlResponse = AuthSessionUrlResponse(session: Session.fromJson(response)!, redirectType: redirectType?.name);
 
     final session = authSessionUrlResponse.session;
     _saveSession(session);
@@ -386,9 +373,7 @@ class GoTrueClient {
     String? nonce,
     String? captchaToken,
   }) async {
-    if (provider != OAuthProvider.google &&
-        provider != OAuthProvider.apple &&
-        provider != OAuthProvider.kakao) {
+    if (provider != OAuthProvider.google && provider != OAuthProvider.apple && provider != OAuthProvider.kakao) {
       throw AuthException('Provider must be '
           '${OAuthProvider.google.name}, ${OAuthProvider.apple.name} or ${OAuthProvider.kakao.name}.');
     }
@@ -452,12 +437,9 @@ class GoTrueClient {
     if (email != null) {
       String? codeChallenge;
       if (_flowType == AuthFlowType.pkce) {
-        assert(_asyncStorage != null,
-            'You need to provide asyncStorage to perform pkce flow.');
+        assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
         final codeVerifier = generatePKCEVerifier();
-        await _asyncStorage!.setItem(
-            key: '${Constants.defaultStorageKey}-code-verifier',
-            value: codeVerifier);
+        await _asyncStorage!.setItem(key: '${Constants.defaultStorageKey}-code-verifier', value: codeVerifier);
         codeChallenge = generatePKCEChallenge(codeVerifier);
       }
       await _fetch.request(
@@ -516,10 +498,8 @@ class GoTrueClient {
     String? captchaToken,
     String? tokenHash,
   }) async {
-    assert((email != null && phone == null) || (email == null && phone != null),
-        '`email` or `phone` needs to be specified.');
-    assert(token != null || tokenHash != null,
-        '`token` or `tokenHash` needs to be specified.');
+    assert((email != null && phone == null) || (email == null && phone != null), '`email` or `phone` needs to be specified.');
+    assert(token != null || tokenHash != null, '`token` or `tokenHash` needs to be specified.');
 
     final body = {
       if (email != null) 'email': email,
@@ -531,8 +511,7 @@ class GoTrueClient {
       if (tokenHash != null) 'token_hash': tokenHash,
     };
     final fetchOptions = GotrueRequestOptions(headers: _headers, body: body);
-    final response = await _fetch
-        .request('$_url/verify', RequestMethodType.post, options: fetchOptions);
+    final response = await _fetch.request('$_url/verify', RequestMethodType.post, options: fetchOptions);
 
     final authResponse = AuthResponse.fromJson(response);
 
@@ -543,9 +522,7 @@ class GoTrueClient {
     }
 
     _saveSession(authResponse.session!);
-    notifyAllSubscribers(type == OtpType.recovery
-        ? AuthChangeEvent.passwordRecovery
-        : AuthChangeEvent.signedIn);
+    notifyAllSubscribers(type == OtpType.recovery ? AuthChangeEvent.passwordRecovery : AuthChangeEvent.signedIn);
 
     return authResponse;
   }
@@ -574,12 +551,9 @@ class GoTrueClient {
     String? codeChallenge;
     String? codeChallengeMethod;
     if (_flowType == AuthFlowType.pkce) {
-      assert(_asyncStorage != null,
-          'You need to provide asyncStorage to perform pkce flow.');
+      assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
       final codeVerifier = generatePKCEVerifier();
-      await _asyncStorage!.setItem(
-          key: '${Constants.defaultStorageKey}-code-verifier',
-          value: codeVerifier);
+      await _asyncStorage!.setItem(key: '${Constants.defaultStorageKey}-code-verifier', value: codeVerifier);
       codeChallenge = generatePKCEChallenge(codeVerifier);
       codeChallengeMethod = codeVerifier == codeChallenge ? 'plain' : 's256';
     }
@@ -590,8 +564,7 @@ class GoTrueClient {
             if (providerId != null) 'provider_id': providerId,
             if (domain != null) 'domain': domain,
             if (redirectTo != null) 'redirect_to': redirectTo,
-            if (captchaToken != null)
-              'gotrue_meta_security': {'captcha_token': captchaToken},
+            if (captchaToken != null) 'gotrue_meta_security': {'captcha_token': captchaToken},
             'skip_http_redirect': true,
             'code_challenge': codeChallenge,
             'code_challenge_method': codeChallengeMethod,
@@ -610,8 +583,7 @@ class GoTrueClient {
       throw AuthException('Not logged in.');
     }
 
-    final currentSessionRefreshToken =
-        refreshToken ?? _currentSession?.refreshToken;
+    final currentSessionRefreshToken = refreshToken ?? _currentSession?.refreshToken;
 
     if (currentSessionRefreshToken == null) {
       throw AuthSessionMissingException();
@@ -629,8 +601,7 @@ class GoTrueClient {
       throw AuthException('Not logged in.');
     }
 
-    final options =
-        GotrueRequestOptions(headers: headers, jwt: session.accessToken);
+    final options = GotrueRequestOptions(headers: headers, jwt: session.accessToken);
 
     await _fetch.request(
       '$_url/reauthenticate',
@@ -651,15 +622,12 @@ class GoTrueClient {
     String? emailRedirectTo,
     String? captchaToken,
   }) async {
-    assert((email != null && phone == null) || (email == null && phone != null),
-        '`email` or `phone` needs to be specified.');
+    assert((email != null && phone == null) || (email == null && phone != null), '`email` or `phone` needs to be specified.');
     if (email != null) {
-      assert([OtpType.signup, OtpType.emailChange].contains(type),
-          'email must be provided for type ${type.name}');
+      assert([OtpType.signup, OtpType.emailChange].contains(type), 'email must be provided for type ${type.name}');
     }
     if (phone != null) {
-      assert([OtpType.sms, OtpType.phoneChange].contains(type),
-          'phone must be provided for type ${type.name}');
+      assert([OtpType.sms, OtpType.phoneChange].contains(type), 'phone must be provided for type ${type.name}');
     }
 
     final body = {
@@ -722,8 +690,7 @@ class GoTrueClient {
       jwt: accessToken,
       redirectTo: emailRedirectTo,
     );
-    final response = await _fetch.request('$_url/user', RequestMethodType.put,
-        options: options);
+    final response = await _fetch.request('$_url/user', RequestMethodType.put, options: options);
     final userResponse = UserResponse.fromJson(response);
 
     _currentUser = userResponse.user;
@@ -763,8 +730,7 @@ class GoTrueClient {
     if (_flowType == AuthFlowType.pkce) {
       final authCode = originUrl.queryParameters['code'];
       if (authCode == null) {
-        throw AuthPKCEGrantCodeExchangeError(
-            'No code detected in query parameters.');
+        throw AuthPKCEGrantCodeExchangeError('No code detected in query parameters.');
       }
       return await exchangeCodeForSession(authCode);
     }
@@ -830,8 +796,7 @@ class GoTrueClient {
 
     if (scope != SignOutScope.others) {
       _removeSession();
-      await _asyncStorage?.removeItem(
-          key: '${Constants.defaultStorageKey}-code-verifier');
+      await _asyncStorage?.removeItem(key: '${Constants.defaultStorageKey}-code-verifier');
       notifyAllSubscribers(AuthChangeEvent.signedOut);
     }
 
@@ -842,9 +807,7 @@ class GoTrueClient {
         // ignore 401s since an invalid or expired JWT should sign out the current session
         // ignore 403s since user might not exist anymore
         // ignore 404s since user might not exist anymore
-        if (error.statusCode != '401' &&
-            error.statusCode != '403' &&
-            error.statusCode != '404') {
+        if (error.statusCode != '401' && error.statusCode != '403' && error.statusCode != '404') {
           rethrow;
         }
       }
@@ -859,8 +822,7 @@ class GoTrueClient {
   }) async {
     String? codeChallenge;
     if (_flowType == AuthFlowType.pkce) {
-      assert(_asyncStorage != null,
-          'You need to provide asyncStorage to perform pkce flow.');
+      assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
       final codeVerifier = generatePKCEVerifier();
       await _asyncStorage!.setItem(
         key: '${Constants.defaultStorageKey}-code-verifier',
@@ -965,8 +927,7 @@ class GoTrueClient {
           throw notifyException(AuthException('Session expired.'));
         }
       } else {
-        final shouldEmitEvent = _currentSession == null ||
-            _currentSession?.user.id != session.user.id;
+        final shouldEmitEvent = _currentSession == null || _currentSession?.user.id != session.user.id;
         _saveSession(session);
 
         if (shouldEmitEvent) {
@@ -1014,12 +975,7 @@ class GoTrueClient {
         return;
       }
 
-      final expiresInTicks =
-          (DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000)
-                      .difference(now)
-                      .inMilliseconds /
-                  Constants.autoRefreshTickDuration.inMilliseconds)
-              .floor();
+      final expiresInTicks = (DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000).difference(now).inMilliseconds / Constants.autoRefreshTickDuration.inMilliseconds).floor();
 
       // Only tick if the next tick comes after the retry threshold
       if (expiresInTicks <= Constants.autoRefreshTickThreshold) {
@@ -1039,25 +995,16 @@ class GoTrueClient {
       // Make a GET request
       () async {
         attempt++;
-        final options = GotrueRequestOptions(
-            headers: _headers,
-            body: {'refresh_token': refreshToken},
-            query: {'grant_type': 'refresh_token'});
-        final response = await _fetch
-            .request('$_url/token', RequestMethodType.post, options: options);
+        final options = GotrueRequestOptions(headers: _headers, body: {'refresh_token': refreshToken}, query: {'grant_type': 'refresh_token'});
+        final response = await _fetch.request('$_url/token', RequestMethodType.post, options: options);
         final authResponse = AuthResponse.fromJson(response);
         return authResponse;
       },
       retryIf: (e) {
         // Do not retry if the next retry comes after the next tick.
-        final nextBackOff =
-            Duration(milliseconds: (200 * pow(2, attempt - 1).floor()));
+        final nextBackOff = Duration(milliseconds: (200 * pow(2, attempt - 1).floor()));
 
-        return e is AuthRetryableFetchException &&
-            (DateTime.now().millisecondsSinceEpoch +
-                    nextBackOff.inMilliseconds -
-                    startedAt.millisecondsSinceEpoch) <
-                Constants.autoRefreshTickDuration.inMilliseconds;
+        return e is AuthRetryableFetchException && (DateTime.now().millisecondsSinceEpoch + nextBackOff.inMilliseconds - startedAt.millisecondsSinceEpoch) < Constants.autoRefreshTickDuration.inMilliseconds;
       },
       maxDelay: Duration(seconds: 10),
       randomizationFactor: 0,
@@ -1088,8 +1035,7 @@ class GoTrueClient {
       urlParams.addAll(queryParams);
     }
     if (_flowType == AuthFlowType.pkce) {
-      assert(_asyncStorage != null,
-          'You need to provide asyncStorage to perform pkce flow.');
+      assert(_asyncStorage != null, 'You need to provide asyncStorage to perform pkce flow.');
       final codeVerifier = generatePKCEVerifier();
       await _asyncStorage!.setItem(
         key: '${Constants.defaultStorageKey}-code-verifier',

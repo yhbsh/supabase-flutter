@@ -9,8 +9,7 @@ Future<void> main() async {
   final supabase = SupabaseClient(supabaseUrl, supabaseKey);
 
   // query data
-  final data =
-      await supabase.from('countries').select().order('name', ascending: true);
+  final data = await supabase.from('countries').select().order('name', ascending: true);
   print(data);
 
   // insert data
@@ -26,24 +25,13 @@ Future<void> main() async {
 
   // realtime
   final realtimeChannel = supabase.channel('my_channel');
-  realtimeChannel
-      .onPostgresChanges(
-          event: PostgresChangeEvent.all,
-          schema: 'public',
-          table: 'countries',
-          callback: (payload) {})
-      .subscribe();
+  realtimeChannel.onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'countries', callback: (payload) {}).subscribe();
 
   // remember to remove channel when no longer needed
   supabase.removeChannel(realtimeChannel);
 
   // stream
-  final streamSubscription = supabase
-      .from('countries')
-      .stream(primaryKey: ['id'])
-      .order('name')
-      .limit(10)
-      .listen((snapshot) {
+  final streamSubscription = supabase.from('countries').stream(primaryKey: ['id']).order('name').limit(10).listen((snapshot) {
         print('snapshot: $snapshot');
       });
 
@@ -53,23 +41,19 @@ Future<void> main() async {
   // Upload file to bucket "public"
   final file = File('example.txt');
   file.writeAsStringSync('File content');
-  final storageResponse =
-      await supabase.storage.from('public').upload('example.txt', file);
+  final storageResponse = await supabase.storage.from('public').upload('example.txt', file);
   print('upload response : $storageResponse');
 
   // Get download url
-  final urlResponse =
-      await supabase.storage.from('public').createSignedUrl('example.txt', 60);
+  final urlResponse = await supabase.storage.from('public').createSignedUrl('example.txt', 60);
   print('download url : $urlResponse');
 
   // Download text file
-  final fileResponse =
-      await supabase.storage.from('public').download('example.txt');
+  final fileResponse = await supabase.storage.from('public').download('example.txt');
   print('downloaded file : ${String.fromCharCodes(fileResponse)}');
 
   // Delete file
-  final deleteFileResponse =
-      await supabase.storage.from('public').remove(['example.txt']);
+  final deleteFileResponse = await supabase.storage.from('public').remove(['example.txt']);
   print('deleted file id : ${deleteFileResponse.first.id}');
 
   // Local file cleanup

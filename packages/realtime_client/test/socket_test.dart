@@ -39,8 +39,7 @@ void main() {
 
   group('constructor', () {
     test('sets defaults', () async {
-      final socket =
-          RealtimeClient('wss://example.com/socket', params: {'apikey': '123'});
+      final socket = RealtimeClient('wss://example.com/socket', params: {'apikey': '123'});
       expect(socket.channels.length, 0);
       expect(socket.sendBuffer.length, 0);
       expect(socket.ref, 0);
@@ -114,8 +113,7 @@ void main() {
     });
 
     test('returns endpoint with parameters', () {
-      final socket =
-          RealtimeClient('ws://example.org/chat', params: {'foo': 'bar'});
+      final socket = RealtimeClient('ws://example.org/chat', params: {'foo': 'bar'});
       expect(
         socket.endPointURL,
         'ws://example.org/chat/websocket?foo=bar&vsn=1.0.0',
@@ -240,8 +238,7 @@ void main() {
       final mockedSink = MockWebSocketSink();
 
       when(() => mockedSocketChannel.sink).thenReturn(mockedSink);
-      when(() => mockedSink.close(any(), any()))
-          .thenAnswer((_) => Future.value());
+      when(() => mockedSink.close(any(), any())).thenAnswer((_) => Future.value());
 
       const tCode = 12;
       const tReason = 'reason';
@@ -340,12 +337,7 @@ void main() {
     const event = ChannelEvents.join;
     const payload = 'payload';
     const ref = 'ref';
-    final jsonData = json.encode({
-      'topic': topic,
-      'event': event.eventName(),
-      'payload': payload,
-      'ref': ref
-    });
+    final jsonData = json.encode({'topic': topic, 'event': event.eventName(), 'payload': payload, 'ref': ref});
 
     IOWebSocketChannel mockedSocketChannel;
     late RealtimeClient mockedSocket;
@@ -368,12 +360,10 @@ void main() {
       mockedSocket.connect();
       mockedSocket.connState = SocketStates.open;
 
-      final message =
-          Message(topic: topic, payload: payload, event: event, ref: ref);
+      final message = Message(topic: topic, payload: payload, event: event, ref: ref);
       mockedSocket.push(message);
 
-      verify(() => mockedSink.add(captureAny(that: equals(jsonData))))
-          .called(1);
+      verify(() => mockedSink.add(captureAny(that: equals(jsonData)))).called(1);
     });
 
     test('buffers data when not connected', () {
@@ -382,8 +372,7 @@ void main() {
 
       expect(mockedSocket.sendBuffer.length, 0);
 
-      final message =
-          Message(topic: topic, payload: payload, event: event, ref: ref);
+      final message = Message(topic: topic, payload: payload, event: event, ref: ref);
       mockedSocket.push(message);
 
       verifyNever(() => mockedSink.add(any()));
@@ -391,8 +380,7 @@ void main() {
 
       final callback = mockedSocket.sendBuffer[0];
       callback();
-      verify(() => mockedSink.add(captureAny(that: equals(jsonData))))
-          .called(1);
+      verify(() => mockedSink.add(captureAny(that: equals(jsonData)))).called(1);
     });
   });
 
@@ -425,20 +413,16 @@ void main() {
     final updateJoinPayload = {'user_token': 'token123'};
     final pushPayload = {'access_token': 'token123'};
 
-    test(
-        "sets access token, updates channels' join payload, and pushes token to channels",
-        () {
+    test("sets access token, updates channels' join payload, and pushes token to channels", () {
       final mockedChannel1 = MockChannel();
       when(() => mockedChannel1.joinedOnce).thenReturn(true);
       when(() => mockedChannel1.isJoined).thenReturn(true);
-      when(() => mockedChannel1.push(ChannelEvents.accessToken, pushPayload))
-          .thenReturn(MockPush());
+      when(() => mockedChannel1.push(ChannelEvents.accessToken, pushPayload)).thenReturn(MockPush());
 
       final mockedChannel2 = MockChannel();
       when(() => mockedChannel2.joinedOnce).thenReturn(true);
       when(() => mockedChannel2.isJoined).thenReturn(true);
-      when(() => mockedChannel2.push(ChannelEvents.accessToken, pushPayload))
-          .thenReturn(MockPush());
+      when(() => mockedChannel2.push(ChannelEvents.accessToken, pushPayload)).thenReturn(MockPush());
 
       const tTopic1 = 'topic-1';
       const tTopic2 = 'topic-2';
@@ -456,10 +440,8 @@ void main() {
 
       verify(() => channel1.updateJoinPayload(updateJoinPayload)).called(1);
       verify(() => channel2.updateJoinPayload(updateJoinPayload)).called(1);
-      verify(() => channel1.push(ChannelEvents.accessToken, pushPayload))
-          .called(1);
-      verify(() => channel2.push(ChannelEvents.accessToken, pushPayload))
-          .called(1);
+      verify(() => channel1.push(ChannelEvents.accessToken, pushPayload)).called(1);
+      verify(() => channel2.push(ChannelEvents.accessToken, pushPayload)).called(1);
     });
   });
 
